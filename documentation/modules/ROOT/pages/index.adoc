@@ -1,7 +1,5 @@
 = Deploying container applications with Podman
 
-https://albertogd.github.io/rh-upm-containers/rh-upm-containers/index.html[Start **Deploying container applications with Podman**]
-
 [.text-center.strong]
 == Introduction
 
@@ -18,7 +16,7 @@ xref:02-basic-container.adoc[Start]
 
 === 2. Run a MySQL container with Persistent Storage
 
-Run a MySQL container in the background, using persistent storage and listening on port 30306 
+Run a MySQL container in the background, using persistent storage and listening on port 30306.
 
 xref:03-container-storage.adoc[Start]
 

@@ -1,1 +1,26 @@
-Check the build courseware https://redhat-scholars.github.io/build-course[documentation]  on how folder structure, how to use macros and other gotchas
+# Deploying container applications with Podman
+
+https://albertogd.github.io/rh-upm-containers/rh-upm-containers/index.html[Start **Deploying container applications with Podman**]
+
+## Introduction
+Deploying container applications with Podman is the first of part of **Autoscaling serverless applications in Openshift** workshop to get familiar with autoscaling and serverless applications in Openshift. You'll start creating a MySQL container. Then, you'll add Persistent Storage and local listen. Finally, you'll create an Apache container to serve a index.html.
+
+## Exercises
+
+### 1.  Run a MySQL container
+
+Create and run a MySQL container in the background.
+
+### 2. Run a MySQL container with Persistent Storage
+
+Run a MySQL container in the background, using persistent storage and listening on port 30306.
+
+### 3. Create your own HTTP container image with a Dockerfile
+
+Create your own HTTP image using a Dockerfile. After that, you’ll start a new container in the background serving some custom php files.
+
+## Author Information
+
+Alberto Gonzalez de Dios @Red Hat
+
+algonzal@redhat.com
