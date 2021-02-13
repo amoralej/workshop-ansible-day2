@@ -12,6 +12,7 @@ content:
       branches: HEAD
       start_path: documentation
 asciidoc:
+  attributes:
   extensions:
     - ./lib/remote-include-processor.js
     - ./lib/tab-block.js
