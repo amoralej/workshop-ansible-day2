@@ -1,5 +1,5 @@
-name: template-tutorial
-title: Template Tutorial
+name: rh-upm-containers
+title: Deploying container applications with Podman
 version: master
 nav:
   - modules/ROOT/nav.adoc

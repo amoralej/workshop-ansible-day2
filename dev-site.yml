@@ -2,9 +2,9 @@ runtime:
   cache_dir: ./.cache/antora
 
 site:
-  title: Template Tutorial(Dev Mode)
+  title: Deploying container applications with Podman
   url: http://localhost:3000/rhs-build-course/index.html
-  start_page: template-tutorial::index.adoc
+  start_page: rh-upm-containers::index.adoc
 
 content:
   sources:
@@ -12,8 +12,6 @@ content:
       branches: HEAD
       start_path: documentation
 asciidoc:
-  attributes:
-    title: Template Tutorial(Dev Mode)
   extensions:
     - ./lib/remote-include-processor.js
     - ./lib/tab-block.js

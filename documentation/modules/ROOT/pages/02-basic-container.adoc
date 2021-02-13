@@ -1,0 +1,123 @@
+= Run a MySQL container
+
+In this exercise, you will learn to create and run a MySQL container in the background.
+
+[#search]
+== Search MySQL image
+
+**1) Search MySQL images with podman search mysql. Choose the image which version is 5.7, belongs to rhscl (Red Hat Software Collection), and is in redhat.com registry. Get image information with skopeo inspect docker://<image>. Which port is exposed?**
+
+Run podman search and grep the results:
+
+[.lines_7]
+[source,bash,subs="+macros,+attributes"]
+----
+$ podman search mysql | grep "redhat.com" | grep rhscl  | grep 5.7 | awk '{print $2}'
+registry.access.redhat.com/rhscl/mysql-57-rhel7
+----
+
+Run skopeo inspect to get the image information, and grep by expose keyword:
+[.lines_7]
+[source,bash,subs="+macros,+attributes"]
+----
+$ skopeo inspect docker://registry.access.redhat.com/rhscl/mysql-57-rhel7 | grep expose
+----
+
+[#pull]
+== Pull the MySQL image
+
+**2) Pull the image from registry.access.redhat.com/rhscl/mysql-57-rhel7, and run the image. What error is displayed?**
+
+Pull the image with the command: 
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ sudo podman pull  registry.access.redhat.com/rhscl/mysql-57-rhel7
+----
+
+Run the container with the command:
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ sudo podman run registry.access.redhat.com/rhscl/mysql-57-rhel7
+Trying to pull registry.access.redhat.com/rhscl/mysql-57-rhel7:latest...
+Getting image source signatures
+Copying blob 1d2c4ce43b78 done  
+Copying blob f1e961fe4c51 done  
+Copying blob 9f1840c3b3bd done  
+Copying blob 1c9f515fc6ab done  
+Copying config 60726b33a0 done  
+Writing manifest to image destination
+Storing signatures
+=> sourcing 20-validate-variables.sh ...
+You must either specify the following environment variables:
+  MYSQL_USER (regex: '^[a-zA-Z0-9_]+$')
+  MYSQL_PASSWORD (regex: '^[a-zA-Z0-9_~!@#$%^&*()-=<>,.?;:|]+$')
+  MYSQL_DATABASE (regex: '^[a-zA-Z0-9_]+$')
+Or the following environment variable:
+  MYSQL_ROOT_PASSWORD (regex: '^[a-zA-Z0-9_~!@#$%^&*()-=<>,.?;:|]+$')
+Or both.
+----
+
+The error displayed is because the container  needs some environment variables to configure MYSQL database
+
+**Run again skopeo inspect docker://<image> and check for “usage”. Is this information useful?**
+
+Run skopeo inspect to get the image information, and grep by usage keyword:
+
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ skopeo inspect docker://registry.access.redhat.com/rhscl/mysql-57-rhel7 | grep usage
+"usage": "docker run -d -e MYSQL_USER=user -e MYSQL_PASSWORD=pass -e MYSQL_DATABASE=db -p 3306:3306 rhscl/mysql-57-rhel7"
+----
+
+[#run]
+== Run a MySQL container
+
+**3) Run a container in the background using the MySQL image, with the environment variables:**
+
+* MYSQL_USER=user
+* MYSQL_PASSWORD=pass
+* MYSQL_DATABASE=upm
+* MYSQL_ROOT_PASSWORD=rootpass
+
+Run the container with podman run:
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ podman run --name mysql -d -e MYSQL_USER=user -e MYSQL_PASSWORD=pass -e MYSQL_DATABASE=upm -e MYSQL_ROOT_PASSWORD=rootpass rhscl/mysql-57-rhel7
+----
+
+[#access]
+== Access to the MySQL container
+
+**4) Access to the container, and check you’re able to connect to the database**
+
+Access the container with podman exec:
+
+[source,yaml,subs="+macros,+attributes"]
+----
+$ podman exec -it -l /bin/bash
+----
+
+**Run env command, and look for variables starting with MYSQL. Can you connect to the database using env variables?**
+
+Run env command to get environment variables, and grep by MYSQL:
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ env | grep MYSQL
+MYSQL_PREFIX=/opt/rh/rh-mysql57/root/usr
+MYSQL_VERSION=5.7
+MYSQL_DATABASE=items
+MYSQL_PASSWORD=mypa55
+MYSQL_USER=user1
+MYSQL_ROOT_PASSWORD=r00tpa55
+----
+Run mysql with the container environment variables to connect to the database:
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ mysql -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE 
+----

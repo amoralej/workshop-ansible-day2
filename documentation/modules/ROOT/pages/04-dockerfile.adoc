@@ -1,0 +1,199 @@
+= Create your own HTTP container image with a Dockerfile
+
+In this exercise, you will learn to create your own HTTP image using a Dockerfile. After that, you’ll start a new container in the background serving some custom php files.
+
+[#dockerfile]
+== Create a Dockerfile to create an Apache image
+
+**1) Create a new directory, and create the this basic Dockerfile**
+
+[.lines_7]
+[source,dockerfile,subs="+macros,+attributes"]
+----
+FROM ubi7/ubi:7.6
+
+ENV PORT 8080
+
+EXPOSE ${PORT}
+
+RUN yum install -y httpd && \
+    yum clean all && \
+    chown -R apache:apache /etc/httpd/logs/ && \
+    chown -R apache:apache /run/httpd/
+
+USER apache
+
+COPY ./src/ /var/www/html/
+
+CMD ["httpd", "-D", "FOREGROUND"]            
+----
+
+Create a directory:
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ mkdir ~/http
+$ cd  ~/http
+----
+
+Create the file Dockerfile:
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ vim Dockerfile
+----
+
+Press ‘i’ to enter in edit mode, and copy and paste the previous Dockerfile. Press ‘Esc’, and then ‘:wq!’.
+
+**Create a directory named src, and inside src, create a file index.html which shows “My webpage”. Then, run the command:**
+
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ sudo podman build -t myhttp .
+----
+
+Create the src directory:
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ mkdir src
+----
+
+Create a file index.htm with the content My webpage:
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ echo “My webpage” > src/index. html
+Build the image with podman build:
+$ sudo podman build -t myhttp .
+----
+
+**Check the image is stored in localhost. Run the image myhttp, listening on port 8080. Do a curl http://127.0.0.1:8080.**
+
+Run the podman images command to check the images:
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ sudo podman images
+----
+
+Run the http container using the image just created:
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ sudo podman run -d -p 8080:8080  myhttp
+----
+
+Do a curl localhost using port 8080 :
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ curl http://127.0.0.1:8080 
+----
+
+**Are you able to see anything? Why not?**
+
+No, because the Apache (httpd) in the container is listening on port 80, not on port 8080.
+
+
+[#expose]
+== Expose application in port 80
+
+**2) Fix the Dockerfile EXPOSE to use port 80, build the image using tag v2, and run again the image forwarding the port 80. Are you able to see now “My webpage”?**
+
+Edit the Dockerfile, and change EXPOSE 8080 to EXPOSE 80:
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ vim Dockerfile
+..
+ENV PORT 80
+..
+----
+
+Build the image with podman build using tag v2:
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ sudo podman build -t myhttp:v2 .
+----
+
+Run the http container using the image just created:
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ sudo podman run -d -p 8080:80  myhttp:v2
+----
+
+Do a curl localhost using port 8080 :
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ curl http://127.0.0.1:8080 
+Mi web
+----
+
+[#port]
+== Change apache port in the image
+
+**3) Now change back EXPOSE to 8080, and change Apache configuration to listen on port 8080. Build the image again, and run the container.**  
+
+[NOTE]
+====
+You can change the port Apache is listening on using the command
+sed -i '0,/^Listen [0-9]*/s//Listen 8080/' /etc/httpd/conf/httpd.conf
+====
+
+Edit the Dockerfile, and add a RUN command:
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ vim Dockerfile
+----
+
+[source,dockerfile,subs="+macros,+attributes"]
+----
+FROM ubi7/ubi:7.6
+
+ENV PORT 8080
+
+EXPOSE ${PORT}
+
+RUN yum install -y httpd && \
+    yum clean all && \
+    chown -R apache:apache /etc/httpd/logs/ && \
+    chown -R apache:apache /run/httpd/ && \
+     sed -ri -e "/^Listen 80/c\Listen ${PORT}" /etc/httpd/conf/httpd.conf
+
+USER apache
+
+COPY ./src/ /var/www/html/
+
+CMD ["httpd", "-D", "FOREGROUND"]        
+----
+
+Build the image with podman build using tag v3:
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ sudo podman build -t myhttp:v3 .
+----
+
+Run the http container using the image just created:
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ sudo podman run -d -p 8080:8080  myhttp:v3
+----
+
+Do a curl localhost using port 8080 :
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ curl http://127.0.0.1:8080 
+----
+
+**Are you able to connect now forwarding port 8080? Why?**
+
+Yes, Apache is now listening on port 8080, so the connection is successful.

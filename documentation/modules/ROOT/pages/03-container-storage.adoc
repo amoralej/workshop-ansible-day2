@@ -1,0 +1,266 @@
+= Run a MySQL container with Persistent Storage
+
+In this exercise, you will learn to run a MySQL container in the background, using persistent storage and listening on port 30306.
+
+[#database]
+== Create a database in MySQL
+
+**1) Connect to the MYSQL database deployed in Exercise 1 , and run the following commands**
+
+[source,sql,subs="+macros,+attributes"]
+----
+mysql> create table students (name VARCHAR(20));
+mysql> INSERT INTO students VALUES ("user");
+mysql> select * from students;
+----
+
+Run a mysql container  with podman run:
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ sudo podman run -d -e MYSQL_USER=user -e MYSQL_PASSWORD=pass -e MYSQL_DATABASE=upm -e MYSQL_ROOT_PASSWORD=rootpass rhscl/mysql-57-rhel7
+----
+
+Access the container using podman exec:
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ sudo podman exec -it -l /bin/bash
+----
+
+Connect to mysql database:
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ mysql -u$MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE
+----
+
+Execute the SQL commands displayed in the previous table:
+
+[source,sql,subs="+macros,+attributes"]
+----
+mysql> create table students (name VARCHAR(20));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> INSERT INTO students VALUES ("user");
+Query OK, 1 row affected (0.02 sec)
+
+mysql> select * from students;
++------+
+| name |
++------+
+| user |
++------+
+1 row in set (0.00 sec)
+----
+
+**Stop the container with podman stop -l, and run again the MYSQL container. Connect to the database, and run select * from students;**
+
+Stop the container:
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ sudo podman stop -l
+----
+
+Start a new container:
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ sudo podman run -d -e MYSQL_USER=user -e MYSQL_PASSWORD=pass -e MYSQL_DATABASE=upm -e MYSQL_ROOT_PASSWORD=rootpass rhscl/mysql-57-rhel7
+----
+
+Access the container using podman exec:
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ sudo podman exec -it -l /bin/bash
+----
+
+Connect to mysql database:
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ mysql -u$MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE
+----
+
+Execute the SQL commands displayed in the previous table:
+
+[source,sql,subs="+macros,+attributes"]
+----
+mysql>  select * from students;
+ERROR 1146 (42S02): Table 'upm.students' doesnt exist
+----
+
+**Are you able to see the user student? Why not?**
+
+No, because the containers we are creating don’t have persistent storage. The table and record we created before was lost when the container was stopped. 
+
+[#directory]
+== Create a directory for persistent storage
+
+**2) Stop again the container. Create a directory in your workstation and set the proper permissions using the following commands:**
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ sudo mkdir -pv /var/local/mysql
+$ sudo semanage fcontext -a -t container_file_t '/var/local/mysql(/.*)?'
+$ sudo restorecon -R /var/local/mysql
+$ sudo chown -Rv 27:27 /var/local/mysql
+----
+
+[NOTE]
+====
+Setting the proper permissions to a shared directory in a RHEL environment is out of the scope of this course. Selinux context must be changed to container_file_t, and the user running processes in 
+the container must be capable of writing files to the directory. You can get the uid of the process in the MYSQL container running: id -u $(ps x o user,pid,cmd | grep mysqld | grep -v grep | awk '{print $1}')
+====
+
+Stop the container with podman stop:
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ sudo podman stop -l
+----
+
+Create the directory with the previous commands:
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ sudo mkdir -pv /var/local/mysql
+$ sudo semanage fcontext -a -t container_file_t '/var/local/mysql(/.*)?'
+$ sudo restorecon -R /var/local/mysql
+$ sudo chown -Rv 27:27 /var/local/mysql
+----
+
+**Run again the container using the option -v /var/local/mysql:/var/lib/mysql/data. Repeat the MySQL commands to insert data.**
+
+Start the new container:
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ sudo podman run -d -v /var/local/mysql:/var/lib/mysql/data -e MYSQL_USER=user -e MYSQL_PASSWORD=pass -e MYSQL_DATABASE=upm -e MYSQL_ROOT_PASSWORD=rootpass rhscl/mysql-57-rhel7
+----
+
+Access the container using podman exec:
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ sudo podman exec -it -l /bin/bash
+----
+
+Connect to mysql database:
+
+[source,bash,subs="+macros,+attributes"]
+----
+bash-4.2$ mysql -u$MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE
+----
+
+Execute the SQL commands to insert the data:
+
+[source,sql,subs="+macros,+attributes"]
+----
+mysql> create table students (name VARCHAR(20));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> INSERT INTO students VALUES ("user");
+Query OK, 1 row affected (0.02 sec)
+
+mysql> select * from students;
++------+
+| name |
++------+
+| user |
++------+
+1 row in set (0.00 sec)
+----
+
+**Stop the container and run again.**
+
+Stop the container with podman stop:
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ sudo podman stop -l
+----
+
+Start a new container:
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ sudo podman run -d  -v /var/local/mysql:/var/lib/mysql/data -e MYSQL_USER=user -e MYSQL_PASSWORD=pass -e MYSQL_DATABASE=upm -e MYSQL_ROOT_PASSWORD=rootpass rhscl/mysql-57-rhel7
+----
+
+Access the container using podman exec:
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ sudo podman exec -it -l /bin/bash
+----
+
+Connect to mysql database:
+
+[source,bash,subs="+macros,+attributes"]
+----
+bash-4.2$ mysql -u$MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE
+----
+
+Execute the SQL commands displayed in the previous table:
+
+[source,sql,subs="+macros,+attributes"]
+----
+mysql>  select * from students;
++------+
+| name |
++------+
+| user |
++------+
+1 row in set (0.00 sec)
+----
+
+**Are you able now to see the data? Why?**
+
+Yes, now we’re able to see the data because the database is stored in a persistent storage. 
+
+[#port]
+== Run the MySQL container listening on a port
+
+**3) Finally, run the container listening on port 30306 in localhost. Connect to MySQL from your workstation using the following command and run select * from students; **
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ mysql -uuser -h 127.0.0.1 -ppass  -P30306
+----
+
+Stop the container with podman stop:
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ sudo podman stop -l
+----
+
+Start a new container:
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ sudo podman run -d -p 30306:3306  -v /var/local/mysql:/var/lib/mysql/data -e MYSQL_USER=user -e MYSQL_PASSWORD=pass -e MYSQL_DATABASE=upm -e MYSQL_ROOT_PASSWORD=rootpass rhscl/mysql-57-rhel7
+----
+
+Connect to the mysql database using the previous command:
+
+[source,bash,subs="+macros,+attributes"]
+----
+$ mysql -uuser -h 127.0.0.1 -ppass  -P30306
+----
+
+Execute the SQL command:
+
+[source,sql,subs="+macros,+attributes"]
+----
+mysql>  select * from students;
++------+
+| name |
++------+
+| user |
++------+
+1 row in set (0.00 sec)
+----
