@@ -3,7 +3,7 @@
 [.text-center.strong]
 == Introduction
 
-Deploying container applications with Podman is the first of part of **Autoscaling serverless applications in Openshift** workshop to get familiar with autoscaling and serverless applications in Openshift. You'll start creating a MySQL container. Then, you'll add Persistent Storage and local listen. Finally, you'll create an Apache container to serve a index.html.
+Deploying container applications with Podman is the first of part of **Autoscaling serverless applications in Openshift** workshop to get familiar with container and autoscaling serverless applications in Openshift. You'll start creating a MySQL container. Then, you'll add Persistent Storage and local listen. Finally, you'll create an Apache container to serve a index.html.
 
 [.tiles.browse]
 == Exercises
