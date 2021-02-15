@@ -60,12 +60,17 @@ Create the src directory:
 $ mkdir src
 ----
 
-Create a file index.htm with the content My webpage:
+Create a file index.html with the content My webpage:
 
 [source,bash,subs="+macros,+attributes"]
 ----
-$ echo “My webpage” > src/index. html
+$ echo “My webpage” > src/index.html
+----
+
 Build the image with podman build:
+
+[source,bash,subs="+macros,+attributes"]
+----
 $ sudo podman build -t myhttp .
 ----
 
