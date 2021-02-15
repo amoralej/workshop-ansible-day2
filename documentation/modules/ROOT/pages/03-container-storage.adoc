@@ -249,7 +249,7 @@ Connect to the mysql database using the previous command:
 
 [source,bash,subs="+macros,+attributes"]
 ----
-$ mysql -uuser -h 127.0.0.1 -ppass  -P30306
+$ mysql -uuser -h 127.0.0.1 -ppass  -P30306 upm
 ----
 
 Execute the SQL command:
