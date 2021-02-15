@@ -128,7 +128,7 @@ Run the http container using the image just created:
 
 [source,bash,subs="+macros,+attributes"]
 ----
-$ sudo podman run -d -p 8080:80  myhttp:v2
+$ sudo podman run -d -p 8080:80 --privileged myhttp:v2
 ----
 
 Do a curl localhost using port 8080 :
