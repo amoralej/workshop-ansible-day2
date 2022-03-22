@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Run a MySQL container :: Deploying container applications with Podman</title>
+    <link rel="canonical" href="https://albertogd.github.io/rh-upm-containers/rh-upm-containers/index.html/rh-upm-containers/02-basic-container.html">
+    <link rel="prev" href="01-setup.html">
+    <link rel="next" href="03-container-storage.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../_/css/site.css">
+<link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img
+          src="../_/img/header_logo.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" href="https://albertogd.github.io/rh-upm-containers/rh-upm-containers/index.html">Deploying container applications with Podman</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="rh-upm-containers" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html">Deploying container applications with Podman</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="01-setup.html">1. Setup</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01-setup.html#prerequisite">Prerequisites</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="02-basic-container.html">2. Run a MySQL container</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#search">Search MySQL image</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#pull">Pull the MySQL image</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#run">Run a MySQL container</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#access">Access to the MySQL container</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="03-container-storage.html">2. Run a MySQL container with Persistent Storage</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-container-storage.html#database">Create a database in MySQL</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-container-storage.html#directory">Create a directory for persistent storage</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-container-storage.html#directory">Run the MySQL container listening on a port</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="04-dockerfile.html">3. Create your own HTTP container image with a Dockerfile</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-dockerfile.html#dockferfile">Create a Dockerfile to create an Apache image</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-dockerfile.html#expose">Expose application in port 80</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-dockerfile.html#port">Change apache port in the image</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Deploying container applications with Podman</span>
+    <span class="version">master</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <span class="title">Deploying container applications with Podman</span>
+      <ul class="versions">
+        <li class="version is-current">
+          <a href="index.html">master</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Deploying container applications with Podman</a></li>
+    <li><a href="02-basic-container.html">2. Run a MySQL container</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/amoralej/workshop-ansible-day2/edit/master/documentation/modules/ROOT/pages/02-basic-container.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Run a MySQL container</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this exercise, you will learn to create and run a MySQL container in the background.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="search"><a class="anchor" href="#search"></a>Search MySQL image</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>1) Search MySQL images with podman search mysql. Choose the image which version is 5.7, belongs to rhscl (Red Hat Software Collection), and is in redhat.com registry. Get image information with skopeo inspect docker://&lt;image&gt;. Which port is exposed?</strong></p>
+</div>
+<div class="paragraph">
+<p>Run podman search and grep the results:</p>
+</div>
+<div class="listingblock lines_7">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ podman search mysql | grep "redhat.com" | grep rhscl  | grep 5.7 | awk '{print $2}'
+registry.access.redhat.com/rhscl/mysql-57-rhel7</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Run skopeo inspect to get the image information, and grep by expose keyword:</p>
+</div>
+<div class="listingblock lines_7">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ skopeo inspect docker://registry.access.redhat.com/rhscl/mysql-57-rhel7 | grep expose</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="pull"><a class="anchor" href="#pull"></a>Pull the MySQL image</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>2) Pull the image from registry.access.redhat.com/rhscl/mysql-57-rhel7, and run the image. What error is displayed?</strong></p>
+</div>
+<div class="paragraph">
+<p>Pull the image with the command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ sudo podman pull  registry.access.redhat.com/rhscl/mysql-57-rhel7</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Run the container with the command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ sudo podman run registry.access.redhat.com/rhscl/mysql-57-rhel7
+Trying to pull registry.access.redhat.com/rhscl/mysql-57-rhel7:latest...
+Getting image source signatures
+Copying blob 1d2c4ce43b78 done
+Copying blob f1e961fe4c51 done
+Copying blob 9f1840c3b3bd done
+Copying blob 1c9f515fc6ab done
+Copying config 60726b33a0 done
+Writing manifest to image destination
+Storing signatures
+=&gt; sourcing 20-validate-variables.sh ...
+You must either specify the following environment variables:
+  MYSQL_USER (regex: '^<span class="a-zA-Z0-9_">$')
+  MYSQL_PASSWORD (regex: '^[a-zA-Z0-9_~!@#$%^&amp;*()-=&lt;&gt;,.?;:|]</span>$')
+  MYSQL_DATABASE (regex: '^<span class="a-zA-Z0-9_">$')
+Or the following environment variable:
+  MYSQL_ROOT_PASSWORD (regex: '^[a-zA-Z0-9_~!@#$%^&amp;*()-=&lt;&gt;,.?;:|]</span>$')
+Or both.</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The error displayed is because the container  needs some environment variables to configure MYSQL database</p>
+</div>
+<div class="paragraph">
+<p><strong>Run again skopeo inspect docker://&lt;image&gt; and check for “usage”. Is this information useful?</strong></p>
+</div>
+<div class="paragraph">
+<p>Run skopeo inspect to get the image information, and grep by usage keyword:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ skopeo inspect docker://registry.access.redhat.com/rhscl/mysql-57-rhel7 | grep usage
+"usage": "docker run -d -e MYSQL_USER=user -e MYSQL_PASSWORD=pass -e MYSQL_DATABASE=db -p 3306:3306 rhscl/mysql-57-rhel7"</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="run"><a class="anchor" href="#run"></a>Run a MySQL container</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>3) Run a container in the background using the MySQL image, with the environment variables:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>MYSQL_USER=user</p>
+</li>
+<li>
+<p>MYSQL_PASSWORD=pass</p>
+</li>
+<li>
+<p>MYSQL_DATABASE=upm</p>
+</li>
+<li>
+<p>MYSQL_ROOT_PASSWORD=rootpass</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Run the container with podman run:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ podman run --name mysql -d -e MYSQL_USER=user -e MYSQL_PASSWORD=pass -e MYSQL_DATABASE=upm -e MYSQL_ROOT_PASSWORD=rootpass rhscl/mysql-57-rhel7</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="access"><a class="anchor" href="#access"></a>Access to the MySQL container</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>4) Access to the container, and check you’re able to connect to the database</strong></p>
+</div>
+<div class="paragraph">
+<p>Access the container with podman exec:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">$ podman exec -it -l /bin/bash</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Run env command, and look for variables starting with MYSQL. Can you connect to the database using env variables?</strong></p>
+</div>
+<div class="paragraph">
+<p>Run env command to get environment variables, and grep by MYSQL:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ env | grep MYSQL
+MYSQL_PREFIX=/opt/rh/rh-mysql57/root/usr
+MYSQL_VERSION=5.7
+MYSQL_DATABASE=items
+MYSQL_PASSWORD=mypa55
+MYSQL_USER=user1
+MYSQL_ROOT_PASSWORD=r00tpa55</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Run mysql with the container environment variables to connect to the database:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ mysql -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE</code></pre>
+</div>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="01-setup.html">1. Setup</a></span>
+  <span class="next"><a href="03-container-storage.html">2. Run a MySQL container with Persistent Storage</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
