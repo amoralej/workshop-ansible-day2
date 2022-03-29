@@ -4,7 +4,7 @@ runtime:
 site:
   title: Deploying container applications with Podman
   url: http://localhost:3000/rhs-build-course/index.html
-  start_page: rh-upm-containers::index.adoc
+  start_page: workshop-ansible-day2::index.adoc
 
 content:
   sources:

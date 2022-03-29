@@ -1,0 +1,104 @@
+= Que son los ansible facts
+
+Los facts son datos de cada uno de los sistemas gestionados por ansible que son descubiertos automáticamente por ansible. La principal diferencia frente a las variables es que no son definidos al crear o ejecutar los playbooks y que siempre son individuales, no por grupos.
+
+Típicamente tienen información del sistema, sistema operativo, dirección ip, y un largo etcetera. Todos los facts se guardan como una estructura de diccionario en la variable ansible_facts y se pueden usar como cualquier otra variable.
+
+
+== Ver todos los facts de un sistema
+
+1) A continuación vamos a crear un playbook que mostrará por pantalla todos los facts de nuestros sistemas gestionados.
+
+[.lines_7]
+[source,bash,subs="+macros,+attributes"]
+----
+- hosts: all
+  tasks:
+    - name: Mostrar todos los facts
+      debug:
+        var: ansible_facts
+----
+
+Y ejecutar el playbook. 
+
+[.lines_7]
+[source,bash,subs="+macros,+attributes"]
+----
+ansible-playbook -i hosts test_variables.yaml
+----
+
+== Acceder a un fact específico
+
+Probemos como acceder a un fact concreto como elementos en un diccionario usando `["key"]`. Por ejemplo, uno que nos de el número de cores que tiene nuestro sistema.
+
+[.lines_7]
+[source,bash,subs="+macros,+attributes"]
+----
+- hosts: all
+  tasks:
+    - name: Mostrar todos los facts
+      debug:
+        var: ansible_facts["processor_count"]
+----
+
+Para facilitar su uso, muchos de estos facts del primer nivel de ansible_facts se pueden acceder directamente a traves del nombre "ansible_<nombre del fact>". Así, el siguiente playbook funciona correctamente:
+
+[.lines_7]
+[source,bash,subs="+macros,+attributes"]
+----
+- hosts: all
+  tasks:
+    - name: Mostrar todos los facts
+      debug:
+        var: ansible_processor_count
+----
+
+
+== Uso de variables en condicionales para la ejecución de tareas
+
+1) En muchos casos nos interesará condicionar la ejecución de una tarea a que una variable tenga un valor determinado. Los condicionales en ansible se crean con la opción `when` de tal manera que una tarea que tiene un when solo se ejecutará cuando la condición puesta es verdadera.
+
+En este caso, las variables no van entre llaves, ni comillas.
+
+Por ejemplo, si queremos ejecutar una determinada tarea solo en el primero de nuestros servidores apache, serverb, por ejemplo podríamos hacer:
+
+[.lines_7]
+[source,bash,subs="+macros,+attributes"]
+----
+- hosts: all
+  tasks:
+     - name: Ejecutar el comando hostname
+       shell: hostname
+       register: hostname_output
+
+    - name: Mostrar la variable hostname_output
+      debug:
+        var: hostname_salida
+      when: hostname_output.stdout == 'serverb.lab.example.com'
+----
+
+Fijaos que en este caso, la tarea de tipo debug ha sido omitida ('skipped') para los servidores a, c y d y solo se ha ejecutado en el servidor b.
+
+Fijaos que en la comparación puedo usar operadores de igualdad `==`, de distinto `!=`, de mayor `>`, menor `<`, mayor o igual `>=`, y menor o igual `<=`.
+
+
+== Más ejemplos de uso de variables en una tarea
+
+Otro caso de uso muy habitual en ansible es crear un archivo con un cierto contenido en los sistemas gestionados. En el caso de que el contenido sea estático y no dependa de nada, lo podemos realizar con el módulo `copy`. En este ejemplo vamos a empezar por crear un fichero `fichero_ejemplo.txt` en la carpeta `files` con el contenido que deseeis (podeis utilizar nano o vi). A continuación crear el siguiente playbook:
+
+[.lines_7]
+[source,bash,subs="+macros,+attributes"]
+----
+- hosts: all
+  tasks:
+     - name: Ejecutar el comando hostname
+       shell: hostname
+       register: hostname_output
+
+     - name: copiar el fichero de ejemplo con el nombre de cada nodo
+       copy:
+         src: fichero_ejemplo.txt
+         dst: "/tmp/{{ hostname_output.stdout }}.txt"
+----
+
+

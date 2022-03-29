@@ -1,0 +1,160 @@
+= Definir variables en Ansible
+
+Como en cualquier otro lenguaje, el uso de variables es una parte fundamental de Ansible.
+
+El uso más habitual es definir unos parámetros en la ejecución de ansible que pueden ser diferentes para cada sistema
+y que el usuario definirá por sistema o grupo de sistemas gestionados. Por ejemplo, supongamos que estoy gestionando con
+mi playbook de ansible un entorno web de dos capas en la que quiero instalar la base de datos en uno de mis sistemas y
+apache en otros.
+
+Existen múltiples maneras de definir variables. A continuación vamos a ver como definir y usar variables.
+
+
+[#search]
+== Definir variables en el inventario
+
+1) Es posible definir variables para cada sistema en el inventario:
+
+[.lines_7]
+[source,bash,subs="+macros,+attributes"]
+----
+[database]
+servera package=mariadb-server
+
+[apache]
+serverb package=httpd
+serverc package=httpd
+serverd package=httpd
+----
+
+Ahora podemos chequear el valor asignado a cada variable definiendo el playbook `test_variables.yaml`:
+
+[.lines_7]
+[source,bash,subs="+macros,+attributes"]
+----
+- hosts: all
+  become: true
+  tasks:
+    - name: Print package variable
+      debug:
+        var: package
+----
+
+Y ejecutar el playbook:
+
+[.lines_7]
+[source,bash,subs="+macros,+attributes"]
+----
+ansible-playbook -i hosts test_variables.yaml
+----
+
+Probad a desasignar la variable para alguno de los servidores y fijaos en la salida del comando.
+
+== Definición de variables en playbook
+
+1) Otra opción es definir las variables en el propio playbook. Por ejemplo:
+
+[.lines_7]
+[source,bash,subs="+macros,+attributes"]
+----
+- hosts: all
+  vars:
+    test_variable: 3
+  become: true
+  tasks:
+    - name: Print package variable
+      debug:
+        var: package
+    - name: Print test variable
+      debug:
+        var: test_variable
+----
+
+== Definición de variables por grupos
+
+1) En muchos casos nos interesa definir las variables a nivel de grupos de sistemas, no individualmente. Esto se puede realizar en el propio inventario añadiendo una sección [<grupo>.vars].
+Por ejemplo:
+
+[.lines_7]
+[source,bash,subs="+macros,+attributes"]
+----
+[database]
+servera
+
+[apache]
+serverb
+serverc
+serverd
+
+[database:vars]
+package=mariadb-server
+
+[apache:vars]
+package=httpd
+----
+
+2) También es posible definir las variables por grupos en un archivo con formato yaml en archivos separados. Estos archivos van en la carpeta group_vars y el nombre del archivo debe ser el nombre del grupo.
+
+Por ejemplo, el archivo *group_vars/apache* podría contener:
+
+[.lines_7]
+[source,bash,subs="+macros,+attributes"]
+----
+package:
+    - "httpd"
+    - "mod_ssl"
+----
+
+Fijaos que en este caso la variable package contiene *una lista* para los servidores apache. Sobre esta lista será posible iterar tal y como veremos posteriormente.
+
+Además, las variables pueden ser strings, números (que no debemos entrecomillar), booleanos (true o false) o diccionarios. Por ejemplo:
+
+[.lines_7]
+[source,bash,subs="+macros,+attributes"]
+----
+test_string: "string"
+test_array:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+test_dic:
+    employee01:
+        id: 01
+        name: Jose
+        age: 31
+    employee02:
+        id: 02
+        name: Victoria
+        age: 25
+----
+
+
+    
+== Definir variables durante la ejecución
+
+1) Es común que nos interese usar variables que definiremos durante la ejecución del playbook en base a la salida de un comando, por ejemplo. Esto se hace con la opción `register` que añadirá a una variable la salida y el valor de retorno del comando. Por ejemplo:
+
+[.lines_7]
+[source,bash,subs="+macros,+attributes"]
+----
+- hosts: all
+  tasks:
+     - name: Ejecutar el comando hostname
+       shell: hostname
+       register: hostname_output
+
+    - name: Mostrar la variable hostname_output
+      debug:
+        var: hostname_salida
+
+    - name: Mostrar la salida standard del comando hostname
+      debug:
+        var: hostname_salida.stdout
+----
+
+Fijaos en el tipo de dato que es hostanme_salida y hostname_dalida.stdout.
+
+

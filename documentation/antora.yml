@@ -1,5 +1,5 @@
-name: rh-upm-containers
-title: Deploying container applications with Podman
+name: workshop-ansible-day2
+title: Workshop de introucción a Ansible - Dia 2
 version: master
 nav:
   - modules/ROOT/nav.adoc

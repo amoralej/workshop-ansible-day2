@@ -1,0 +1,78 @@
+= Usar variables en Ansible
+
+En ansible, es posible utilizar las variables con distintas finalidades.
+
+Normalmente, para usar una variable las incluiremos dentro de unas dobles llaves entrecomilladas "{{ variable }}" será sustituido por su valor.
+
+== Uso de parámetros de una tarea
+
+1) En el ejemplo de nuestra aplicación, es posible instalar los paquetes necesarios en cada sistema utilizando la variable package.
+
+[.lines_7]
+[source,bash,subs="+macros,+attributes"]
+----
+- hosts: all
+  become: true
+  tasks:
+    - name: Instalar los paquetes necesarios en cada servidor
+      package:
+        name: "{{ package }}"
+        state: present
+----
+
+Y ejecutar el playbook. En este caso estamos usando la opción become, lo que implica que los comando se ejecutarán como root, usando sudo. Para ello usamos la opción -kK para que nos pida la contraseña, que en este caso es "student":
+
+[.lines_7]
+[source,bash,subs="+macros,+attributes"]
+----
+ansible-playbook -kK -i hosts test_variables.yaml
+----
+
+== Uso de variables en condicionales para la ejecución de tareas
+
+1) En muchos casos nos interesará condicionar la ejecución de una tarea a que una variable tenga un valor determinado. Los condicionales en ansible se crean con la opción `when` de tal manera que una tarea que tiene un when solo se ejecutará cuando la condición puesta es verdadera.
+
+En este caso, las variables no van entre llaves, ni comillas.
+
+Por ejemplo, si queremos ejecutar una determinada tarea solo en el primero de nuestros servidores apache, serverb, por ejemplo podríamos hacer:
+
+[.lines_7]
+[source,bash,subs="+macros,+attributes"]
+----
+- hosts: all
+  tasks:
+     - name: Ejecutar el comando hostname
+       shell: hostname
+       register: hostname_output
+
+    - name: Mostrar la variable hostname_output
+      debug:
+        var: hostname_salida
+      when: hostname_output.stdout == 'serverb.lab.example.com'
+----
+
+Fijaos que en este caso, la tarea de tipo debug ha sido omitida ('skipped') para los servidores a, c y d y solo se ha ejecutado en el servidor b.
+
+Fijaos que en la comparación puedo usar operadores de igualdad `==`, de distinto `!=`, de mayor `>`, menor `<`, mayor o igual `>=`, y menor o igual `<=`.
+
+
+== Más ejemplos de uso de variables en una tarea
+
+Otro caso de uso muy habitual en ansible es crear un archivo con un cierto contenido en los sistemas gestionados. En el caso de que el contenido sea estático y no dependa de nada, lo podemos realizar con el módulo `copy`. En este ejemplo vamos a empezar por crear un fichero `fichero_ejemplo.txt` en la carpeta `files` con el contenido que deseeis (podeis utilizar nano o vi). A continuación crear el siguiente playbook:
+
+[.lines_7]
+[source,bash,subs="+macros,+attributes"]
+----
+- hosts: all
+  tasks:
+     - name: Ejecutar el comando hostname
+       shell: hostname
+       register: hostname_output
+
+     - name: copiar el fichero de ejemplo con el nombre de cada nodo
+       copy:
+         src: fichero_ejemplo.txt
+         dst: "/tmp/{{ hostname_output.stdout }}.txt"
+----
+
+
