@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Create your own HTTP container image with a Dockerfile :: Deploying container applications with Podman</title>
+    <link rel="canonical" href="https://albertogd.github.io/rh-upm-containers/rh-upm-containers/index.html/workshop-ansible-day2/04-dockerfile.html">
+    <link rel="prev" href="03-container-storage.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../_/css/site.css">
+<link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img
+          src="../_/img/header_logo.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" href="https://albertogd.github.io/rh-upm-containers/rh-upm-containers/index.html">Deploying container applications with Podman</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="workshop-ansible-day2" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html">Workshop de introucción a Ansible - Dia 2</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="01-setup.html">1. Setup</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01-setup.html#prerequisite">Prerequisites</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="#02-basic-container.adoc">2. Run a MySQL container</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#02-basic-container.adoc#search">Search MySQL image</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#02-basic-container.adoc#pull">Pull the MySQL image</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#02-basic-container.adoc#run">Run a MySQL container</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#02-basic-container.adoc#access">Access to the MySQL container</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="03-container-storage.html">2. Run a MySQL container with Persistent Storage</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-container-storage.html#database">Create a database in MySQL</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-container-storage.html#directory">Create a directory for persistent storage</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-container-storage.html#directory">Run the MySQL container listening on a port</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="04-dockerfile.html">3. Create your own HTTP container image with a Dockerfile</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#dockferfile">Create a Dockerfile to create an Apache image</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#expose">Expose application in port 80</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#port">Change apache port in the image</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Workshop de introucción a Ansible - Dia 2</span>
+    <span class="version">master</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <span class="title">Workshop de introucción a Ansible - Dia 2</span>
+      <ul class="versions">
+        <li class="version is-current">
+          <a href="index.html">master</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Workshop de introucción a Ansible - Dia 2</a></li>
+    <li><a href="04-dockerfile.html">3. Create your own HTTP container image with a Dockerfile</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/amoralej/workshop-ansible-day2/edit/master/documentation/modules/ROOT/pages/04-dockerfile.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Create your own HTTP container image with a Dockerfile</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this exercise, you will learn to create your own HTTP image using a Dockerfile. After that, you’ll start a new container in the background serving some custom php files.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="dockerfile"><a class="anchor" href="#dockerfile"></a>Create a Dockerfile to create an Apache image</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>1) Create a new directory, and create the this basic Dockerfile</strong></p>
+</div>
+<div class="listingblock lines_7">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-dockerfile hljs" data-lang="dockerfile">FROM ubi7/ubi:7.6
+
+ENV PORT 8080
+
+EXPOSE ${PORT}
+
+RUN yum install -y httpd &amp;&amp; \
+    yum clean all &amp;&amp; \
+    chown -R apache:apache /etc/httpd/logs/ &amp;&amp; \
+    chown -R apache:apache /run/httpd/
+
+USER apache
+
+COPY ./src/ /var/www/html/
+
+CMD ["httpd", "-D", "FOREGROUND"]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Create a directory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ mkdir ~/http
+$ cd  ~/http</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Create the file Dockerfile:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ vim Dockerfile</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Press ‘i’ to enter in edit mode, and copy and paste the previous Dockerfile. Press ‘Esc’, and then ‘:wq!’.</p>
+</div>
+<div class="paragraph">
+<p><strong>Create a directory named src, and inside src, create a file index.html which shows “My webpage”. Then, run the command:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ sudo podman build -t myhttp .</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Create the src directory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ mkdir src</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Create a file index.html with the content My webpage:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ echo “My webpage” &gt; src/index.html</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Build the image with podman build:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ sudo podman build -t myhttp .</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Check the image is stored in localhost. Run the image myhttp, listening on port 8080. Do a curl <a href="http://127.0.0.1:8080" class="bare">http://127.0.0.1:8080</a>.</strong></p>
+</div>
+<div class="paragraph">
+<p>Run the podman images command to check the images:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ sudo podman images</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Run the http container using the image just created:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ sudo podman run -d -p 8080:8080  myhttp</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Do a curl localhost using port 8080 :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl <a href="http://127.0.0.1:8080" class="bare">http://127.0.0.1:8080</a></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Are you able to see anything? Why not?</strong></p>
+</div>
+<div class="paragraph">
+<p>No, because the Apache (httpd) in the container is listening on port 80, not on port 8080.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="expose"><a class="anchor" href="#expose"></a>Expose application in port 80</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>2) Fix the Dockerfile EXPOSE to use port 80, build the image using tag v2, and run again the image forwarding the port 80. Are you able to see now “My webpage”?</strong></p>
+</div>
+<div class="paragraph">
+<p>Edit the Dockerfile, and change EXPOSE 8080 to EXPOSE 80:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ vim Dockerfile
+..
+ENV PORT 80
+..</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Build the image with podman build using tag v2:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ sudo podman build -t myhttp:v2 .</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Run the http container using the image just created:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ sudo podman run -d -p 8080:80 --privileged myhttp:v2</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Do a curl localhost using port 8080 :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl <a href="http://127.0.0.1:8080" class="bare">http://127.0.0.1:8080</a>
+Mi web</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="port"><a class="anchor" href="#port"></a>Change apache port in the image</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>3) Now change back EXPOSE to 8080, and change Apache configuration to listen on port 8080. Build the image again, and run the container.</strong></p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>You can change the port Apache is listening on using the command
+sed -i '0,/^Listen [0-9]*/s//Listen 8080/' /etc/httpd/conf/httpd.conf</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Edit the Dockerfile, and add a RUN command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ vim Dockerfile</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-dockerfile hljs" data-lang="dockerfile">FROM ubi7/ubi:7.6
+
+ENV PORT 8080
+
+EXPOSE ${PORT}
+
+RUN yum install -y httpd &amp;&amp; \
+    yum clean all &amp;&amp; \
+    chown -R apache:apache /etc/httpd/logs/ &amp;&amp; \
+    chown -R apache:apache /run/httpd/ &amp;&amp; \
+     sed -ri -e "/^Listen 80/c\Listen ${PORT}" /etc/httpd/conf/httpd.conf
+
+USER apache
+
+COPY ./src/ /var/www/html/
+
+CMD ["httpd", "-D", "FOREGROUND"]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Build the image with podman build using tag v3:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ sudo podman build -t myhttp:v3 .</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Run the http container using the image just created:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ sudo podman run -d -p 8080:8080  myhttp:v3</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Do a curl localhost using port 8080 :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl <a href="http://127.0.0.1:8080" class="bare">http://127.0.0.1:8080</a></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Are you able to connect now forwarding port 8080? Why?</strong></p>
+</div>
+<div class="paragraph">
+<p>Yes, Apache is now listening on port 8080, so the connection is successful.</p>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="03-container-storage.html">2. Run a MySQL container with Persistent Storage</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

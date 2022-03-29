@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Definir variables en Ansible :: Deploying container applications with Podman</title>
+    <link rel="canonical" href="https://albertogd.github.io/rh-upm-containers/rh-upm-containers/index.html/workshop-ansible-day2/02-basic-ansible-variables.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../_/css/site.css">
+<link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img
+          src="../_/img/header_logo.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" href="https://albertogd.github.io/rh-upm-containers/rh-upm-containers/index.html">Deploying container applications with Podman</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="workshop-ansible-day2" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html">Workshop de introucción a Ansible - Dia 2</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="01-setup.html">1. Setup</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01-setup.html#prerequisite">Prerequisites</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="#02-basic-container.adoc">2. Run a MySQL container</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#02-basic-container.adoc#search">Search MySQL image</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#02-basic-container.adoc#pull">Pull the MySQL image</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#02-basic-container.adoc#run">Run a MySQL container</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#02-basic-container.adoc#access">Access to the MySQL container</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="03-container-storage.html">2. Run a MySQL container with Persistent Storage</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-container-storage.html#database">Create a database in MySQL</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-container-storage.html#directory">Create a directory for persistent storage</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-container-storage.html#directory">Run the MySQL container listening on a port</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="04-dockerfile.html">3. Create your own HTTP container image with a Dockerfile</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-dockerfile.html#dockferfile">Create a Dockerfile to create an Apache image</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-dockerfile.html#expose">Expose application in port 80</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-dockerfile.html#port">Change apache port in the image</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Workshop de introucción a Ansible - Dia 2</span>
+    <span class="version">master</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <span class="title">Workshop de introucción a Ansible - Dia 2</span>
+      <ul class="versions">
+        <li class="version is-current">
+          <a href="index.html">master</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Workshop de introucción a Ansible - Dia 2</a></li>
+    <li><a href="02-basic-ansible-variables.html">Definir variables en Ansible</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/amoralej/workshop-ansible-day2/edit/master/documentation/modules/ROOT/pages/02-basic-ansible-variables.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Definir variables en Ansible</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Como en cualquier otro lenguaje, el uso de variables es una parte fundamental de Ansible.</p>
+</div>
+<div class="paragraph">
+<p>El uso más habitual es definir unos parámetros en la ejecución de ansible que pueden ser diferentes para cada sistema
+y que el usuario definirá por sistema o grupo de sistemas gestionados. Por ejemplo, supongamos que estoy gestionando con
+mi playbook de ansible un entorno web de dos capas en la que quiero instalar la base de datos en uno de mis sistemas y
+apache en otros.</p>
+</div>
+<div class="paragraph">
+<p>Existen múltiples maneras de definir variables. A continuación vamos a ver como definir y usar variables.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="search"><a class="anchor" href="#search"></a>Definir variables en el inventario</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>1) Es posible definir variables para cada sistema en el inventario:</p>
+</div>
+<div class="listingblock lines_7">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[database]
+servera package=mariadb-server
+
+[apache]
+serverb package=httpd
+serverc package=httpd
+serverd package=httpd</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Ahora podemos chequear el valor asignado a cada variable definiendo el playbook <code>test_variables.yaml</code>:</p>
+</div>
+<div class="listingblock lines_7">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">- hosts: all
+  become: true
+  tasks:
+    - name: Print package variable
+      debug:
+        var: package</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Y ejecutar el playbook:</p>
+</div>
+<div class="listingblock lines_7">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">ansible-playbook -i hosts test_variables.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Probad a desasignar la variable para alguno de los servidores y fijaos en la salida del comando.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_definición_de_variables_en_playbook"><a class="anchor" href="#_definición_de_variables_en_playbook"></a>Definición de variables en playbook</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>1) Otra opción es definir las variables en el propio playbook. Por ejemplo:</p>
+</div>
+<div class="listingblock lines_7">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">- hosts: all
+  vars:
+    test_variable: 3
+  become: true
+  tasks:
+    - name: Print package variable
+      debug:
+        var: package
+    - name: Print test variable
+      debug:
+        var: test_variable</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_definición_de_variables_por_grupos"><a class="anchor" href="#_definición_de_variables_por_grupos"></a>Definición de variables por grupos</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>1) En muchos casos nos interesa definir las variables a nivel de grupos de sistemas, no individualmente. Esto se puede realizar en el propio inventario añadiendo una sección [&lt;grupo&gt;.vars].
+Por ejemplo:</p>
+</div>
+<div class="listingblock lines_7">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[database]
+servera
+
+[apache]
+serverb
+serverc
+serverd
+
+[database:vars]
+package=mariadb-server
+
+[apache:vars]
+package=httpd</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>2) También es posible definir las variables por grupos en un archivo con formato yaml en archivos separados. Estos archivos van en la carpeta group_vars y el nombre del archivo debe ser el nombre del grupo.</p>
+</div>
+<div class="paragraph">
+<p>Por ejemplo, el archivo <strong>group_vars/apache</strong> podría contener:</p>
+</div>
+<div class="listingblock lines_7">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">package:
+    - "httpd"
+    - "mod_ssl"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Fijaos que en este caso la variable package contiene <strong>una lista</strong> para los servidores apache. Sobre esta lista será posible iterar tal y como veremos posteriormente.</p>
+</div>
+<div class="paragraph">
+<p>Además, las variables pueden ser strings, números (que no debemos entrecomillar), booleanos (true o false) o diccionarios. Por ejemplo:</p>
+</div>
+<div class="listingblock lines_7">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">test_string: "string"
+test_array:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+test_dic:
+    employee01:
+        id: 01
+        name: Jose
+        age: 31
+    employee02:
+        id: 02
+        name: Victoria
+        age: 25</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_definir_variables_durante_la_ejecución"><a class="anchor" href="#_definir_variables_durante_la_ejecución"></a>Definir variables durante la ejecución</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>1) Es común que nos interese usar variables que definiremos durante la ejecución del playbook en base a la salida de un comando, por ejemplo. Esto se hace con la opción <code>register</code> que añadirá a una variable la salida y el valor de retorno del comando. Por ejemplo:</p>
+</div>
+<div class="listingblock lines_7">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">- hosts: all
+  tasks:
+     - name: Ejecutar el comando hostname
+       shell: hostname
+       register: hostname_output
+
+    - name: Mostrar la variable hostname_output
+      debug:
+        var: hostname_salida
+
+    - name: Mostrar la salida standard del comando hostname
+      debug:
+        var: hostname_salida.stdout</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Fijaos en el tipo de dato que es hostanme_salida y hostname_dalida.stdout.</p>
+</div>
+</div>
+</div>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

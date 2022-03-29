@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Usar variables en Ansible :: Deploying container applications with Podman</title>
+    <link rel="canonical" href="https://albertogd.github.io/rh-upm-containers/rh-upm-containers/index.html/workshop-ansible-day2/03-use-ansible-variables.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../_/css/site.css">
+<link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img
+          src="../_/img/header_logo.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" href="https://albertogd.github.io/rh-upm-containers/rh-upm-containers/index.html">Deploying container applications with Podman</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="workshop-ansible-day2" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html">Workshop de introucción a Ansible - Dia 2</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="01-setup.html">1. Setup</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01-setup.html#prerequisite">Prerequisites</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="#02-basic-container.adoc">2. Run a MySQL container</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#02-basic-container.adoc#search">Search MySQL image</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#02-basic-container.adoc#pull">Pull the MySQL image</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#02-basic-container.adoc#run">Run a MySQL container</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#02-basic-container.adoc#access">Access to the MySQL container</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="03-container-storage.html">2. Run a MySQL container with Persistent Storage</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-container-storage.html#database">Create a database in MySQL</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-container-storage.html#directory">Create a directory for persistent storage</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-container-storage.html#directory">Run the MySQL container listening on a port</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="04-dockerfile.html">3. Create your own HTTP container image with a Dockerfile</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-dockerfile.html#dockferfile">Create a Dockerfile to create an Apache image</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-dockerfile.html#expose">Expose application in port 80</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-dockerfile.html#port">Change apache port in the image</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Workshop de introucción a Ansible - Dia 2</span>
+    <span class="version">master</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <span class="title">Workshop de introucción a Ansible - Dia 2</span>
+      <ul class="versions">
+        <li class="version is-current">
+          <a href="index.html">master</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Workshop de introucción a Ansible - Dia 2</a></li>
+    <li><a href="03-use-ansible-variables.html">Usar variables en Ansible</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/amoralej/workshop-ansible-day2/edit/master/documentation/modules/ROOT/pages/03-use-ansible-variables.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Usar variables en Ansible</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>En ansible, es posible utilizar las variables con distintas finalidades.</p>
+</div>
+<div class="paragraph">
+<p>Normalmente, para usar una variable las incluiremos dentro de unas dobles llaves entrecomilladas "{{ variable }}" será sustituido por su valor.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_uso_de_parámetros_de_una_tarea"><a class="anchor" href="#_uso_de_parámetros_de_una_tarea"></a>Uso de parámetros de una tarea</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>1) En el ejemplo de nuestra aplicación, es posible instalar los paquetes necesarios en cada sistema utilizando la variable package.</p>
+</div>
+<div class="listingblock lines_7">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">- hosts: all
+  become: true
+  tasks:
+    - name: Instalar los paquetes necesarios en cada servidor
+      package:
+        name: "{{ package }}"
+        state: present</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Y ejecutar el playbook. En este caso estamos usando la opción become, lo que implica que los comando se ejecutarán como root, usando sudo. Para ello usamos la opción -kK para que nos pida la contraseña, que en este caso es "student":</p>
+</div>
+<div class="listingblock lines_7">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">ansible-playbook -kK -i hosts test_variables.yaml</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_uso_de_variables_en_condicionales_para_la_ejecución_de_tareas"><a class="anchor" href="#_uso_de_variables_en_condicionales_para_la_ejecución_de_tareas"></a>Uso de variables en condicionales para la ejecución de tareas</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>1) En muchos casos nos interesará condicionar la ejecución de una tarea a que una variable tenga un valor determinado. Los condicionales en ansible se crean con la opción <code>when</code> de tal manera que una tarea que tiene un when solo se ejecutará cuando la condición puesta es verdadera.</p>
+</div>
+<div class="paragraph">
+<p>En este caso, las variables no van entre llaves, ni comillas.</p>
+</div>
+<div class="paragraph">
+<p>Por ejemplo, si queremos ejecutar una determinada tarea solo en el primero de nuestros servidores apache, serverb, por ejemplo podríamos hacer:</p>
+</div>
+<div class="listingblock lines_7">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">- hosts: all
+  tasks:
+     - name: Ejecutar el comando hostname
+       shell: hostname
+       register: hostname_output
+
+    - name: Mostrar la variable hostname_output
+      debug:
+        var: hostname_salida
+      when: hostname_output.stdout == 'serverb.lab.example.com'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Fijaos que en este caso, la tarea de tipo debug ha sido omitida ('skipped') para los servidores a, c y d y solo se ha ejecutado en el servidor b.</p>
+</div>
+<div class="paragraph">
+<p>Fijaos que en la comparación puedo usar operadores de igualdad <code>==</code>, de distinto <code>!=</code>, de mayor <code>&gt;</code>, menor <code>&lt;</code>, mayor o igual <code>&gt;=</code>, y menor o igual <code>&#8656;</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_más_ejemplos_de_uso_de_variables_en_una_tarea"><a class="anchor" href="#_más_ejemplos_de_uso_de_variables_en_una_tarea"></a>Más ejemplos de uso de variables en una tarea</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Otro caso de uso muy habitual en ansible es crear un archivo con un cierto contenido en los sistemas gestionados. En el caso de que el contenido sea estático y no dependa de nada, lo podemos realizar con el módulo <code>copy</code>. En este ejemplo vamos a empezar por crear un fichero <code>fichero_ejemplo.txt</code> en la carpeta <code>files</code> con el contenido que deseeis (podeis utilizar nano o vi). A continuación crear el siguiente playbook:</p>
+</div>
+<div class="listingblock lines_7">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">- hosts: all
+  tasks:
+     - name: Ejecutar el comando hostname
+       shell: hostname
+       register: hostname_output
+
+     - name: copiar el fichero de ejemplo con el nombre de cada nodo
+       copy:
+         src: fichero_ejemplo.txt
+         dst: "/tmp/{{ hostname_output.stdout }}.txt"</code></pre>
+</div>
+</div>
+</div>
+</div>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
