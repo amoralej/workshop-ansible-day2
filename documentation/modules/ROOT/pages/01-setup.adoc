@@ -4,4 +4,4 @@ include::_attributes.adoc[]
 [#prerequisite]
 == Prerequisites
 
-For this lab you need access to the Red Hat DO180 course lab. In case you don't have access, you can use any Linux OS with podman installed, like Fedora.
+For this lab you need access to the Red Hat RH294 course lab. In case you don't have access, you can use any Linux OS with ansible installed, like Fedora, CentOS or RHEL.

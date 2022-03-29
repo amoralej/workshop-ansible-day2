@@ -54,51 +54,64 @@ Para facilitar su uso, muchos de estos facts del primer nivel de ansible_facts s
 ----
 
 
-== Uso de variables en condicionales para la ejecución de tareas
+== Añadir facts durante la ejecución con `set_fact`
 
-1) En muchos casos nos interesará condicionar la ejecución de una tarea a que una variable tenga un valor determinado. Los condicionales en ansible se crean con la opción `when` de tal manera que una tarea que tiene un when solo se ejecutará cuando la condición puesta es verdadera.
-
-En este caso, las variables no van entre llaves, ni comillas.
-
-Por ejemplo, si queremos ejecutar una determinada tarea solo en el primero de nuestros servidores apache, serverb, por ejemplo podríamos hacer:
+1) Es posible añadir un fact personalizado a los sistemas gestionados durante la ejecución de los playbooks utilizando tareas basadas en el módulo set_fact. Su uso es muy sencillo, simplemente tenemos que especificar el nombre del fact y su valor deseado. Este valor puede ser generado a partir de otras variables o facts existentes o añadidos con register.
 
 [.lines_7]
 [source,bash,subs="+macros,+attributes"]
 ----
 - hosts: all
   tasks:
-     - name: Ejecutar el comando hostname
-       shell: hostname
-       register: hostname_output
+     - name: Obtner la versión del paquete binutils
+       shell: rpm -q binutils
+       register: binutils_package
 
-    - name: Mostrar la variable hostname_output
+    - name: Incluir fact binutils_version
+      set_fact:
+        binutils_version: "{{ binutils_package.stdout }}"
+
+    - name: Mostrar el valor de binutils_version
       debug:
-        var: hostname_salida
-      when: hostname_output.stdout == 'serverb.lab.example.com'
+        var: binutils_version
 ----
 
-Fijaos que en este caso, la tarea de tipo debug ha sido omitida ('skipped') para los servidores a, c y d y solo se ha ejecutado en el servidor b.
 
-Fijaos que en la comparación puedo usar operadores de igualdad `==`, de distinto `!=`, de mayor `>`, menor `<`, mayor o igual `>=`, y menor o igual `<=`.
+== Uso de variables y facts en templates
 
+1) Un caso de uso muy habitual con ansible es crear un archivo con un contenido determinado donde el contenido de este archivo dependerá de una variable o conjunto de variables. Para ello utilizamos el módulo template con un archivo patrón de entrada con el formato jinja2, donde las variables "{{ variable }}" serán sustituidos por el valor asignado en cada servidor.
 
-== Más ejemplos de uso de variables en una tarea
+A continuación veremos un ejemplo de archivo basado en template. Para ello creamos el directorio templates en la carpeta donde tengamos nuestros playbooks y creamos un archivo index.html.j2
 
-Otro caso de uso muy habitual en ansible es crear un archivo con un cierto contenido en los sistemas gestionados. En el caso de que el contenido sea estático y no dependa de nada, lo podemos realizar con el módulo `copy`. En este ejemplo vamos a empezar por crear un fichero `fichero_ejemplo.txt` en la carpeta `files` con el contenido que deseeis (podeis utilizar nano o vi). A continuación crear el siguiente playbook:
+[.lines_7]
+[source,bash,subs="+macros,+attributes"]
+----
+Este servidor es {{ ansible_fqdn }}
+
+El sistema operativo es {{ ansible_distribution }} {{ ansible_distribution_major_version }}
+
+{% if informacion_detallada %}
+Información adicional:
+{% for nic in ansible_interfaces %}
+Tarjeta de red: {{ nic }}
+{% endfor %}
+{% else %}
+Información adicional deshabilitada
+{% endif %}
+----
+
+Cread el siguiente playbook y probad a ejecutarlo con los valores `true` y `false` para la variable `informacion_detallada`:
 
 [.lines_7]
 [source,bash,subs="+macros,+attributes"]
 ----
 - hosts: all
+  vars:
+    informacion_detallada: true
   tasks:
-     - name: Ejecutar el comando hostname
-       shell: hostname
-       register: hostname_output
-
-     - name: copiar el fichero de ejemplo con el nombre de cada nodo
-       copy:
-         src: fichero_ejemplo.txt
-         dst: "/tmp/{{ hostname_output.stdout }}.txt"
+     - name: Cread el archivo /tmp/index.html
+       template:
+         src: index.html.j2
+         dest: /tmp/index.html
 ----
-
 

@@ -1,0 +1,79 @@
+= Condicionales y bucles en Ansible
+
+Ansible nos permite implementar lógica para controlar el flujo de las tareas a ejecutar en los sistemas gestionados a través del uso de condicionales y bucles aplicados a las variables o los facts.
+
+== Condicionales
+
+Tal y como ya hemos visto los condicionales en Ansible se realizan con la opción  `when` aplicada a las tareas. El patrón de uso básico es:
+
+when: <variable> <operador> <valor>
+
+Las variables en este caso no van entre llaves y el operador puede dependera del tipo de valor y del tipo de comparación:
+
+- `==`, `!=`, `>`, `<`, `>=`, `<=` comparan igualdad, diferencia, mayor, menor, etc...
+- <value> in <list> chequea que un valor exista en una lista
+- <variable> is defined (o is not defined) chequea que una variable esté o no definida.
+- Si la condición es simplemente del tipo *"when: <variable>"* se tratará como un booleano y se chequeara que es true.
+
+En el caso de `is` y `in` es posible invertir la comparación usando `is not` o `not in`.
+
+Por último, es posible combinar varias condiciones en un solo condicional uniéndolas con los operadores `or` o `and`. En ese caso se requiere que se cumpla cualquiera de las condicione o ambas respectivamente.
+
+Algunos ejemplos de uso de condicionales:
+
+[.lines_7]
+[source,bash,subs="+macros,+attributes"]
+----
+- hosts: all
+  vars:
+    test_int: 5
+    test_string: "test"
+    test_bool: true
+  tasks:
+    - name: Mostrar ansible_interfaces si contienen eth0
+      debug:
+        var: ansible_interfaces
+      when: "eth0" in ansible_interfaces
+
+    - name: Mostrar ansible_interfaces si no contienen eth0
+      debug:
+        var: ansible_interfaces
+      when: "eth0" not in ansible_interfaces
+
+    - name: Mostrar ansible_fqdn si test_bool es falso
+      debug:
+        var: ansible_fqdn
+      when: not test_bool
+
+    - name: Mostrar ansible_fqdn si test_string es "test"
+      debug:
+        var: ansible_fqdn
+      when: test_string == "test"
+----
+
+Ejecutad el playbook y observad el resultado. Podéis probar a cambiar los valores de las variables en el propio playbook o usando la opción * -e variable=valor* en el comando ansible-playbook.
+
+== Bucles
+
+Los bucles nos permiten ejecutar una tarea de manera iterativa aplicando los valores de una lista o diccionario. La manera más habitual de crear bucles es usando la palabra `loop` con una lista. El elemento de la lista que se aplica en cada ejecución puede ser referido en la varialbe `item`.
+
+A continuación muestro un ejemplo de creación de usuarios basado en una lista de nombres de usuarios.
+
+[.lines_7]
+[source,bash,subs="+macros,+attributes"]
+----
+- hosts: all
+  vars:
+    usuarios:
+      - testuser1
+      - testuser2
+      - testuser3
+  tasks:
+    - name: Crear usuario
+      user:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ usuarios }}"
+        
+----
+

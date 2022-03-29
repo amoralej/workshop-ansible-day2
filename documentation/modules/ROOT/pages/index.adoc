@@ -1,27 +1,32 @@
-= Deploying container applications with Podman
+= Workshop de ansible - día 2
 
 [.text-center.strong]
-== Introduction
+== Introducción
 
-Deploying container applications with Podman is the first of part of **Autoscaling serverless applications in Openshift** workshop to get familiar with container and autoscaling serverless applications in Openshift. You'll start creating a MySQL container. Then, you'll add Persistent Storage and local listen. Finally, you'll create an Apache container to serve a index.html.
+En esta sesión veremos como controlar el flujo de nuestros playbooks para ejecutar las tareas a ejecutar en cada sistema en particular utilizando variables, facts y estructuras de control como los condicionales o los bucles.
 
 [.tiles.browse]
-== Exercises
 
-=== 1. Run a MySQL container
+=== 1. Definiendo variables
 
-Create and run a MySQL container in the background.
+Aprenderemos como definir variable en la ejecución de nuestros playbooks.
 
-xref:02-basic-container.adoc[Start]
+xref:02-basic-ansible-variables.adoc[Start]
 
-=== 2. Run a MySQL container with Persistent Storage
+=== 2. Usando variables en ansible
 
-Run a MySQL container in the background, using persistent storage and listening on port 30306.
+Veremos como usar las variables definidas anteriormente.
 
-xref:03-container-storage.adoc[Start]
+xref:03-use-ansible-variables.adoc[Start]
 
-=== 3. Create your own HTTP container image with a Dockerfile
+=== 3. Ansible facts
 
-Create your own HTTP image using a Dockerfile. After that, you’ll start a new container in the background serving some custom php files. 
+Descubriremos que son los ansible facts y como utilizarlos.
 
-xref:04-dockerfile.adoc[Start]
+xref:04-facts-ansible.adoc[Start]
+
+=== 3. Condicionales y bucles en ansible
+
+Veremos como modificar el flujo de ejecución usando condicionales y bucles.
+
+xref:05-conditionals-loops.adoc[Start]

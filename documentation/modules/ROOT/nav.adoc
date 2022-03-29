@@ -1,18 +1,6 @@
 * xref:01-setup.adoc[1. Setup]
-** xref:01-setup.adoc#prerequisite[Prerequisites]
+* xref:02-basic-ansible-variables.adoc[2. Definir variables]
+* xref:03-use-ansible-variables.adoc[3. Usar variables]
+* xref:04-facts-ansible.adoc[4. Ansible facts]
+* xref:05-conditionals-loops.adoc[5. Bucles y condicionales]
 
-* xref:02-basic-container.adoc[2. Run a MySQL container]
-** xref:02-basic-container.adoc#search[Search MySQL image]
-** xref:02-basic-container.adoc#pull[Pull the MySQL image]
-** xref:02-basic-container.adoc#run[Run a MySQL container]
-** xref:02-basic-container.adoc#access[Access to the MySQL container]
-
-* xref:03-container-storage.adoc[2. Run a MySQL container with Persistent Storage]
-** xref:03-container-storage.adoc#database[Create a database in MySQL]
-** xref:03-container-storage.adoc#directory[Create a directory for persistent storage]
-** xref:03-container-storage.adoc#directory[Run the MySQL container listening on a port]
-
-* xref:04-dockerfile.adoc[3. Create your own HTTP container image with a Dockerfile]
-** xref:04-dockerfile.adoc#dockferfile[Create a Dockerfile to create an Apache image]
-** xref:04-dockerfile.adoc#expose[Expose application in port 80]
-** xref:04-dockerfile.adoc#port[Change apache port in the image]
