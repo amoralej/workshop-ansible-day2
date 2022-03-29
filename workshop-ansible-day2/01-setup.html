@@ -6,7 +6,7 @@
     <title>Setup :: Deploying container applications with Podman</title>
     <link rel="canonical" href="https://albertogd.github.io/rh-upm-containers/rh-upm-containers/index.html/workshop-ansible-day2/01-setup.html">
     <link rel="prev" href="index.html">
-    <link rel="next" href="#02-basic-container.adoc">
+    <link rel="next" href="02-basic-ansible-variables.html">
     <meta name="generator" content="Antora 3.0.0">
     <link rel="stylesheet" href="../_/css/site.css">
 <link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
@@ -42,61 +42,19 @@
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
   <li class="nav-item is-current-page" data-depth="1">
-    <button class="nav-item-toggle"></button>
     <a class="nav-link" href="01-setup.html">1. Setup</a>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#prerequisite">Prerequisites</a>
-  </li>
-</ul>
   </li>
   <li class="nav-item" data-depth="1">
-    <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="#02-basic-container.adoc">2. Run a MySQL container</a>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#02-basic-container.adoc#search">Search MySQL image</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#02-basic-container.adoc#pull">Pull the MySQL image</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#02-basic-container.adoc#run">Run a MySQL container</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#02-basic-container.adoc#access">Access to the MySQL container</a>
-  </li>
-</ul>
+    <a class="nav-link" href="02-basic-ansible-variables.html">2. Definir variables</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="03-container-storage.html">2. Run a MySQL container with Persistent Storage</a>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="03-container-storage.html#database">Create a database in MySQL</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="03-container-storage.html#directory">Create a directory for persistent storage</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="03-container-storage.html#directory">Run the MySQL container listening on a port</a>
-  </li>
-</ul>
+    <a class="nav-link" href="03-use-ansible-variables.html">3. Usar variables</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="04-dockerfile.html">3. Create your own HTTP container image with a Dockerfile</a>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="04-dockerfile.html#dockferfile">Create a Dockerfile to create an Apache image</a>
+    <a class="nav-link" href="04-facts-ansible.html">4. Ansible facts</a>
   </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="04-dockerfile.html#expose">Expose application in port 80</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="04-dockerfile.html#port">Change apache port in the image</a>
-  </li>
-</ul>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="05-conditionals-loops.html">5. Bucles y condicionales</a>
   </li>
 </ul>
   </li>
@@ -140,13 +98,13 @@
 <h2 id="prerequisite"><a class="anchor" href="#prerequisite"></a>Prerequisites</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>For this lab you need access to the Red Hat DO180 course lab. In case you don&#8217;t have access, you can use any Linux OS with podman installed, like Fedora.</p>
+<p>For this lab you need access to the Red Hat RH294 course lab. In case you don&#8217;t have access, you can use any Linux OS with ansible installed, like Fedora, CentOS or RHEL.</p>
 </div>
 </div>
 </div>
 <nav class="pagination">
   <span class="prev"><a href="index.html">Workshop de introucción a Ansible - Dia 2</a></span>
-  <span class="next"><a href="#02-basic-container.adoc">2. Run a MySQL container</a></span>
+  <span class="next"><a href="02-basic-ansible-variables.html">2. Definir variables</a></span>
 </nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">

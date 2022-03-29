@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Condicionales y bucles en Ansible :: Deploying container applications with Podman</title>
+    <link rel="canonical" href="https://albertogd.github.io/rh-upm-containers/rh-upm-containers/index.html/workshop-ansible-day2/05-conditionals-loops.html">
+    <link rel="prev" href="04-facts-ansible.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../_/css/site.css">
+<link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img
+          src="../_/img/header_logo.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" href="https://albertogd.github.io/rh-upm-containers/rh-upm-containers/index.html">Deploying container applications with Podman</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="workshop-ansible-day2" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html">Workshop de introucción a Ansible - Dia 2</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="01-setup.html">1. Setup</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="02-basic-ansible-variables.html">2. Definir variables</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="03-use-ansible-variables.html">3. Usar variables</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="04-facts-ansible.html">4. Ansible facts</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="05-conditionals-loops.html">5. Bucles y condicionales</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Workshop de introucción a Ansible - Dia 2</span>
+    <span class="version">master</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <span class="title">Workshop de introucción a Ansible - Dia 2</span>
+      <ul class="versions">
+        <li class="version is-current">
+          <a href="index.html">master</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Workshop de introucción a Ansible - Dia 2</a></li>
+    <li><a href="05-conditionals-loops.html">5. Bucles y condicionales</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/amoralej/workshop-ansible-day2/edit/master/documentation/modules/ROOT/pages/05-conditionals-loops.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Condicionales y bucles en Ansible</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Ansible nos permite implementar lógica para controlar el flujo de las tareas a ejecutar en los sistemas gestionados a través del uso de condicionales y bucles aplicados a las variables o los facts.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_condicionales"><a class="anchor" href="#_condicionales"></a>Condicionales</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Tal y como ya hemos visto los condicionales en Ansible se realizan con la opción  <code>when</code> aplicada a las tareas. El patrón de uso básico es:</p>
+</div>
+<div class="paragraph">
+<p>when: &lt;variable&gt; &lt;operador&gt; &lt;valor&gt;</p>
+</div>
+<div class="paragraph">
+<p>Las variables en este caso no van entre llaves y el operador puede dependera del tipo de valor y del tipo de comparación:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>==</code>, <code>!=</code>, <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&#8656;</code> comparan igualdad, diferencia, mayor, menor, etc&#8230;&#8203;</p>
+</li>
+<li>
+<p>&lt;value&gt; in &lt;list&gt; chequea que un valor exista en una lista</p>
+</li>
+<li>
+<p>&lt;variable&gt; is defined (o is not defined) chequea que una variable esté o no definida.</p>
+</li>
+<li>
+<p>Si la condición es simplemente del tipo <strong>"when: &lt;variable&gt;"</strong> se tratará como un booleano y se chequeara que es true.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>En el caso de <code>is</code> y <code>in</code> es posible invertir la comparación usando <code>is not</code> o <code>not in</code>.</p>
+</div>
+<div class="paragraph">
+<p>Por último, es posible combinar varias condiciones en un solo condicional uniéndolas con los operadores <code>or</code> o <code>and</code>. En ese caso se requiere que se cumpla cualquiera de las condicione o ambas respectivamente.</p>
+</div>
+<div class="paragraph">
+<p>Algunos ejemplos de uso de condicionales:</p>
+</div>
+<div class="listingblock lines_7">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">- hosts: all
+  vars:
+    test_int: 5
+    test_string: "test"
+    test_bool: true
+  tasks:
+    - name: Mostrar ansible_interfaces si contienen eth0
+      debug:
+        var: ansible_interfaces
+      when: "eth0" in ansible_interfaces
+
+    - name: Mostrar ansible_interfaces si no contienen eth0
+      debug:
+        var: ansible_interfaces
+      when: "eth0" not in ansible_interfaces
+
+    - name: Mostrar ansible_fqdn si test_bool es falso
+      debug:
+        var: ansible_fqdn
+      when: not test_bool
+
+    - name: Mostrar ansible_fqdn si test_string es "test"
+      debug:
+        var: ansible_fqdn
+      when: test_string == "test"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Ejecutad el playbook y observad el resultado. Podéis probar a cambiar los valores de las variables en el propio playbook o usando la opción * -e variable=valor* en el comando ansible-playbook.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_bucles"><a class="anchor" href="#_bucles"></a>Bucles</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Los bucles nos permiten ejecutar una tarea de manera iterativa aplicando los valores de una lista o diccionario. La manera más habitual de crear bucles es usando la palabra <code>loop</code> con una lista. El elemento de la lista que se aplica en cada ejecución puede ser referido en la varialbe <code>item</code>.</p>
+</div>
+<div class="paragraph">
+<p>A continuación muestro un ejemplo de creación de usuarios basado en una lista de nombres de usuarios.</p>
+</div>
+<div class="listingblock lines_7">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">- hosts: all
+  vars:
+    usuarios:
+      - testuser1
+      - testuser2
+      - testuser3
+  tasks:
+    - name: Crear usuario
+      user:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ usuarios }}"</code></pre>
+</div>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="04-facts-ansible.html">4. Ansible facts</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

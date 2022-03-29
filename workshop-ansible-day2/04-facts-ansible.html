@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Que son los ansible facts :: Deploying container applications with Podman</title>
     <link rel="canonical" href="https://albertogd.github.io/rh-upm-containers/rh-upm-containers/index.html/workshop-ansible-day2/04-facts-ansible.html">
+    <link rel="prev" href="03-use-ansible-variables.html">
+    <link rel="next" href="05-conditionals-loops.html">
     <meta name="generator" content="Antora 3.0.0">
     <link rel="stylesheet" href="../_/css/site.css">
 <link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
@@ -40,61 +42,19 @@
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <button class="nav-item-toggle"></button>
     <a class="nav-link" href="01-setup.html">1. Setup</a>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="01-setup.html#prerequisite">Prerequisites</a>
-  </li>
-</ul>
   </li>
   <li class="nav-item" data-depth="1">
-    <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="#02-basic-container.adoc">2. Run a MySQL container</a>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#02-basic-container.adoc#search">Search MySQL image</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#02-basic-container.adoc#pull">Pull the MySQL image</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#02-basic-container.adoc#run">Run a MySQL container</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#02-basic-container.adoc#access">Access to the MySQL container</a>
-  </li>
-</ul>
+    <a class="nav-link" href="02-basic-ansible-variables.html">2. Definir variables</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="03-container-storage.html">2. Run a MySQL container with Persistent Storage</a>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="03-container-storage.html#database">Create a database in MySQL</a>
+    <a class="nav-link" href="03-use-ansible-variables.html">3. Usar variables</a>
   </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="03-container-storage.html#directory">Create a directory for persistent storage</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="03-container-storage.html#directory">Run the MySQL container listening on a port</a>
-  </li>
-</ul>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="04-facts-ansible.html">4. Ansible facts</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="04-dockerfile.html">3. Create your own HTTP container image with a Dockerfile</a>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="04-dockerfile.html#dockferfile">Create a Dockerfile to create an Apache image</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="04-dockerfile.html#expose">Expose application in port 80</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="04-dockerfile.html#port">Change apache port in the image</a>
-  </li>
-</ul>
+    <a class="nav-link" href="05-conditionals-loops.html">5. Bucles y condicionales</a>
   </li>
 </ul>
   </li>
@@ -126,7 +86,7 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Workshop de introucción a Ansible - Dia 2</a></li>
-    <li><a href="04-facts-ansible.html">Que son los ansible facts</a></li>
+    <li><a href="04-facts-ansible.html">4. Ansible facts</a></li>
   </ul>
 </nav>
   <div class="edit-this-page"><a href="https://github.com/amoralej/workshop-ansible-day2/edit/master/documentation/modules/ROOT/pages/04-facts-ansible.adoc">Edit this Page</a></div>
@@ -199,61 +159,76 @@
 </div>
 </div>
 <div class="sect1">
-<h2 id="_uso_de_variables_en_condicionales_para_la_ejecución_de_tareas"><a class="anchor" href="#_uso_de_variables_en_condicionales_para_la_ejecución_de_tareas"></a>Uso de variables en condicionales para la ejecución de tareas</h2>
+<h2 id="_añadir_facts_durante_la_ejecución_con_set_fact"><a class="anchor" href="#_añadir_facts_durante_la_ejecución_con_set_fact"></a>Añadir facts durante la ejecución con <code>set_fact</code></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>1) En muchos casos nos interesará condicionar la ejecución de una tarea a que una variable tenga un valor determinado. Los condicionales en ansible se crean con la opción <code>when</code> de tal manera que una tarea que tiene un when solo se ejecutará cuando la condición puesta es verdadera.</p>
-</div>
-<div class="paragraph">
-<p>En este caso, las variables no van entre llaves, ni comillas.</p>
-</div>
-<div class="paragraph">
-<p>Por ejemplo, si queremos ejecutar una determinada tarea solo en el primero de nuestros servidores apache, serverb, por ejemplo podríamos hacer:</p>
+<p>1) Es posible añadir un fact personalizado a los sistemas gestionados durante la ejecución de los playbooks utilizando tareas basadas en el módulo set_fact. Su uso es muy sencillo, simplemente tenemos que especificar el nombre del fact y su valor deseado. Este valor puede ser generado a partir de otras variables o facts existentes o añadidos con register.</p>
 </div>
 <div class="listingblock lines_7">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">- hosts: all
   tasks:
-     - name: Ejecutar el comando hostname
-       shell: hostname
-       register: hostname_output
+     - name: Obtner la versión del paquete binutils
+       shell: rpm -q binutils
+       register: binutils_package
 
-    - name: Mostrar la variable hostname_output
+    - name: Incluir fact binutils_version
+      set_fact:
+        binutils_version: "{{ binutils_package.stdout }}"
+
+    - name: Mostrar el valor de binutils_version
       debug:
-        var: hostname_salida
-      when: hostname_output.stdout == 'serverb.lab.example.com'</code></pre>
+        var: binutils_version</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>Fijaos que en este caso, la tarea de tipo debug ha sido omitida ('skipped') para los servidores a, c y d y solo se ha ejecutado en el servidor b.</p>
-</div>
-<div class="paragraph">
-<p>Fijaos que en la comparación puedo usar operadores de igualdad <code>==</code>, de distinto <code>!=</code>, de mayor <code>&gt;</code>, menor <code>&lt;</code>, mayor o igual <code>&gt;=</code>, y menor o igual <code>&#8656;</code>.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_más_ejemplos_de_uso_de_variables_en_una_tarea"><a class="anchor" href="#_más_ejemplos_de_uso_de_variables_en_una_tarea"></a>Más ejemplos de uso de variables en una tarea</h2>
+<h2 id="_uso_de_variables_y_facts_en_templates"><a class="anchor" href="#_uso_de_variables_y_facts_en_templates"></a>Uso de variables y facts en templates</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Otro caso de uso muy habitual en ansible es crear un archivo con un cierto contenido en los sistemas gestionados. En el caso de que el contenido sea estático y no dependa de nada, lo podemos realizar con el módulo <code>copy</code>. En este ejemplo vamos a empezar por crear un fichero <code>fichero_ejemplo.txt</code> en la carpeta <code>files</code> con el contenido que deseeis (podeis utilizar nano o vi). A continuación crear el siguiente playbook:</p>
+<p>1) Un caso de uso muy habitual con ansible es crear un archivo con un contenido determinado donde el contenido de este archivo dependerá de una variable o conjunto de variables. Para ello utilizamos el módulo template con un archivo patrón de entrada con el formato jinja2, donde las variables "{{ variable }}" serán sustituidos por el valor asignado en cada servidor.</p>
+</div>
+<div class="paragraph">
+<p>A continuación veremos un ejemplo de archivo basado en template. Para ello creamos el directorio templates en la carpeta donde tengamos nuestros playbooks y creamos un archivo index.html.j2</p>
+</div>
+<div class="listingblock lines_7">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Este servidor es {{ ansible_fqdn }}
+
+El sistema operativo es {{ ansible_distribution }} {{ ansible_distribution_major_version }}
+
+{% if informacion_detallada %}
+Información adicional:
+{% for nic in ansible_interfaces %}
+Tarjeta de red: {{ nic }}
+{% endfor %}
+{% else %}
+Información adicional deshabilitada
+{% endif %}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Cread el siguiente playbook y probad a ejecutarlo con los valores <code>true</code> y <code>false</code> para la variable <code>informacion_detallada</code>:</p>
 </div>
 <div class="listingblock lines_7">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">- hosts: all
+  vars:
+    informacion_detallada: true
   tasks:
-     - name: Ejecutar el comando hostname
-       shell: hostname
-       register: hostname_output
-
-     - name: copiar el fichero de ejemplo con el nombre de cada nodo
-       copy:
-         src: fichero_ejemplo.txt
-         dst: "/tmp/{{ hostname_output.stdout }}.txt"</code></pre>
+     - name: Cread el archivo /tmp/index.html
+       template:
+         src: index.html.j2
+         dest: /tmp/index.html</code></pre>
 </div>
 </div>
 </div>
 </div>
+<nav class="pagination">
+  <span class="prev"><a href="03-use-ansible-variables.html">3. Usar variables</a></span>
+  <span class="next"><a href="05-conditionals-loops.html">5. Bucles y condicionales</a></span>
+</nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
