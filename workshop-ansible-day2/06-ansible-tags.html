@@ -3,9 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Workshop de ansible - día 2 :: Deploying container applications with Podman</title>
-    <link rel="canonical" href="https://albertogd.github.io/rh-upm-containers/rh-upm-containers/index.html/workshop-ansible-day2/index.html">
-    <link rel="next" href="01-setup.html">
+    <title>Tags en ansible :: Deploying container applications with Podman</title>
+    <link rel="canonical" href="https://albertogd.github.io/rh-upm-containers/rh-upm-containers/index.html/workshop-ansible-day2/06-ansible-tags.html">
+    <link rel="prev" href="05-conditionals-loops.html">
     <meta name="generator" content="Antora 3.0.0">
     <link rel="stylesheet" href="../_/css/site.css">
 <link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
@@ -55,7 +55,7 @@
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="05-conditionals-loops.html">5. Bucles y condicionales</a>
   </li>
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="06-ansible-tags.html">6. Usar Tags</a>
   </li>
 </ul>
@@ -88,69 +88,96 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Workshop de introucción a Ansible - Dia 2</a></li>
-    <li><a href="index.html">Workshop de ansible - día 2</a></li>
+    <li><a href="06-ansible-tags.html">6. Usar Tags</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/amoralej/workshop-ansible-day2/edit/master/documentation/modules/ROOT/pages/index.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/amoralej/workshop-ansible-day2/edit/master/documentation/modules/ROOT/pages/06-ansible-tags.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <article class="doc">
-<h1 class="page">Workshop de ansible - día 2</h1>
-<div class="sect1 text-center strong">
-<h2 id="_introducción"><a class="anchor" href="#_introducción"></a>Introducción</h2>
+<h1 class="page">Tags en ansible</h1>
+<div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>En esta sesión veremos como controlar el flujo de nuestros playbooks para ejecutar las tareas a ejecutar en cada sistema en particular utilizando variables, facts y estructuras de control como los condicionales o los bucles.</p>
+<p>Ansible permite a los usuarios ejecutar solo una parte de las tareas asignadas a un playbook utilizando tags.</p>
 </div>
-<div class="sect2 tiles browse">
-<h3 id="_1_definiendo_variables"><a class="anchor" href="#_1_definiendo_variables"></a>1. Definiendo variables</h3>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_añadir_tags_a_las_tareas"><a class="anchor" href="#_añadir_tags_a_las_tareas"></a>Añadir tags a las tareas</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>Aprenderemos como definir variable en la ejecución de nuestros playbooks.</p>
-</div>
-<div class="paragraph">
-<p><a href="02-basic-ansible-variables.html" class="xref page">Start</a></p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_2_usando_variables_en_ansible"><a class="anchor" href="#_2_usando_variables_en_ansible"></a>2. Usando variables en ansible</h3>
-<div class="paragraph">
-<p>Veremos como usar las variables definidas anteriormente.</p>
+<p>Para utilizar tags debemos añadir la opción <code>tags</code> a las tareas deseadas y añadir el nombre o nombres de las tags asignadas como una lista.</p>
 </div>
 <div class="paragraph">
-<p><a href="03-use-ansible-variables.html" class="xref page">Start</a></p>
+<p>Algunos ejemplos:</p>
+</div>
+<div class="listingblock lines_7">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">- hosts: all
+  tasks:
+    - name: Tarea asignada a tag preparacion
+      debug:
+        msg: "Tag preparacion"
+      tags:
+        - preparacion
+
+    - name: Tarea asignada a tag instalación
+      debug:
+        msg: "Tag instalacion"
+      tags:
+        - instalacion
+
+    - name: Tarea asignada a tag configuración
+      debug:
+        msg: "Tag configuracion"
+      tags:
+        - configuracion
+
+    - name: Tarea asignada a tag configuración e instalacion
+      debug:
+        msg: "Tag configuracion e instalacion"
+      tags:
+        - configuracion
+        - instalacion
+
+    - name: Tarea sin asignar a tags
+      debug:
+        msg: "Tarea sin asignar a tags"</code></pre>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_3_ansible_facts"><a class="anchor" href="#_3_ansible_facts"></a>3. Ansible facts</h3>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_seleccionar_las_tags_ejecutar"><a class="anchor" href="#_seleccionar_las_tags_ejecutar"></a>Seleccionar las tags ejecutar</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>Descubriremos que son los ansible facts y como utilizarlos.</p>
+<p>Por defecto, cuando ejecutamos un playbook con ansible-playbook, se ejecutan <strong>todas</strong> las tags. Si queremos seleccionar las tags a ejecutar debemos emplear la opción <code>--tags &lt;tag&gt;</code> o <code>--tags tag1,tag2</code> si queremos ejecutar más de una tag.</p>
 </div>
 <div class="paragraph">
-<p><a href="04-facts-ansible.html" class="xref page">Start</a></p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_4_condicionales_y_bucles_en_ansible"><a class="anchor" href="#_4_condicionales_y_bucles_en_ansible"></a>4. Condicionales y bucles en ansible</h3>
-<div class="paragraph">
-<p>Veremos como modificar el flujo de ejecución usando condicionales y bucles.</p>
+<p>También es posible ejecutar todas las tags menos una o un conjunto de tags usando la opción <code>--skip-tags &lt;tag&gt;</code> o <code>--skip-tags tag1,tag2</code>.</p>
 </div>
 <div class="paragraph">
-<p><a href="05-conditionals-loops.html" class="xref page">Start</a></p>
+<p>Algunos ejemplos:</p>
+</div>
+<div class="listingblock lines_7">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ ansible-playbook -i hosts --tags all test_tags.yaml
+
+$ ansible-playbook -i hosts --tags preparacion test_tags.yaml
+
+$ ansible-playbook -i hosts --tags preparacion,instalacion test_tags.yaml
+
+$ ansible-playbook -i hosts --skip-tags preparacion,instalacion test_tags.yaml</code></pre>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_5_ansible_tags"><a class="anchor" href="#_5_ansible_tags"></a>5. Ansible Tags</h3>
 <div class="paragraph">
-<p>Veremos como seleccionar las tareas a ejecutar usando tags</p>
-</div>
-<div class="paragraph">
-<p><a href="06-ansible-tags.html" class="xref page">Start</a></p>
-</div>
+<p>Existen dos nombres de tags especiales, <code>always</code> y <code>never</code>. Una tarea que se añada a la tag <code>always</code> siempre será ejecutada incluso aunque no se incluya en la opción --tags a menos que se use --skip-tags always. Igualmente, las tareas asignadas a never no se ejecutarán nunca a menos que usemos --tags never.</p>
 </div>
 </div>
 </div>
 <nav class="pagination">
-  <span class="next"><a href="01-setup.html">1. Setup</a></span>
+  <span class="prev"><a href="05-conditionals-loops.html">5. Bucles y condicionales</a></span>
 </nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
