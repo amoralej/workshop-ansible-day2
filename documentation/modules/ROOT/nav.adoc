@@ -3,4 +3,5 @@
 * xref:03-use-ansible-variables.adoc[3. Usar variables]
 * xref:04-facts-ansible.adoc[4. Ansible facts]
 * xref:05-conditionals-loops.adoc[5. Bucles y condicionales]
+* xref:06-ansible-tags.adoc[6. Usar Tags]
 

@@ -25,8 +25,14 @@ Descubriremos que son los ansible facts y como utilizarlos.
 
 xref:04-facts-ansible.adoc[Start]
 
-=== 3. Condicionales y bucles en ansible
+=== 4. Condicionales y bucles en ansible
 
 Veremos como modificar el flujo de ejecución usando condicionales y bucles.
 
 xref:05-conditionals-loops.adoc[Start]
+
+=== 5. Ansible Tags
+
+Veremos como seleccionar las tareas a ejecutar usando tags
+
+xref:06-ansible-tags.adoc[Start]
