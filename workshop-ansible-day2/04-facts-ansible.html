@@ -103,7 +103,7 @@
 <p>Los facts son datos de cada uno de los sistemas gestionados por ansible que son descubiertos automáticamente por ansible. La principal diferencia frente a las variables es que no son definidos al crear o ejecutar los playbooks y que siempre son individuales, no por grupos.</p>
 </div>
 <div class="paragraph">
-<p>Típicamente tienen información del sistema, sistema operativo, dirección ip, y un largo etcetera. Todos los facts se guardan como una estructura de diccionario en la variable ansible_facts y se pueden usar como cualquier otra variable.</p>
+<p>Típicamente, los facts tienen información del sistema, sistema operativo, dirección ip, y un largo etcetera. Todos los facts se guardan como una estructura de diccionario en la variable ansible_facts y se pueden usar como cualquier otra variable.</p>
 </div>
 </div>
 </div>
@@ -142,7 +142,7 @@
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">- hosts: all
   tasks:
-    - name: Mostrar todos los facts
+    - name: Mostrar el fact processor_count del diccionario ansible_facts
       debug:
         var: ansible_facts["processor_count"]</code></pre>
 </div>
@@ -154,7 +154,7 @@
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">- hosts: all
   tasks:
-    - name: Mostrar todos los facts
+    - name: Mostrar el fact processor_count como variable
       debug:
         var: ansible_processor_count</code></pre>
 </div>
@@ -165,15 +165,15 @@
 <h2 id="_añadir_facts_durante_la_ejecución_con_set_fact"><a class="anchor" href="#_añadir_facts_durante_la_ejecución_con_set_fact"></a>Añadir facts durante la ejecución con <code>set_fact</code></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>1) Es posible añadir un fact personalizado a los sistemas gestionados durante la ejecución de los playbooks utilizando tareas basadas en el módulo set_fact. Su uso es muy sencillo, simplemente tenemos que especificar el nombre del fact y su valor deseado. Este valor puede ser generado a partir de otras variables o facts existentes o añadidos con register.</p>
+<p>Es posible añadir un fact personalizado a los sistemas gestionados durante la ejecución de los playbooks utilizando tareas basadas en el módulo set_fact. Su uso es muy sencillo, simplemente tenemos que especificar el nombre del fact y su valor deseado. Este valor puede ser generado a partir de otras variables o facts existentes o añadidos con register.</p>
 </div>
 <div class="listingblock lines_7">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">- hosts: all
   tasks:
-     - name: Obtner la versión del paquete binutils
-       shell: rpm -q binutils
-       register: binutils_package
+    - name: Obtner la versión del paquete binutils
+      shell: rpm -q binutils
+      register: binutils_package
 
     - name: Incluir fact binutils_version
       set_fact:
@@ -190,7 +190,7 @@
 <h2 id="_uso_de_variables_y_facts_en_templates"><a class="anchor" href="#_uso_de_variables_y_facts_en_templates"></a>Uso de variables y facts en templates</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>1) Un caso de uso muy habitual con ansible es crear un archivo con un contenido determinado donde el contenido de este archivo dependerá de una variable o conjunto de variables. Para ello utilizamos el módulo template con un archivo patrón de entrada con el formato jinja2, donde las variables "{{ variable }}" serán sustituidos por el valor asignado en cada servidor.</p>
+<p>Un caso de uso muy habitual con ansible es crear un archivo con un contenido determinado donde el contenido de este archivo dependerá de una variable o conjunto de variables. Para ello utilizamos el módulo template con un archivo patrón de entrada con el formato jinja2, donde las variables "{{ variable }}" serán sustituidos por el valor asignado en cada servidor.</p>
 </div>
 <div class="paragraph">
 <p>A continuación veremos un ejemplo de archivo basado en template. Para ello creamos el directorio templates en la carpeta donde tengamos nuestros playbooks y creamos un archivo index.html.j2</p>
@@ -220,11 +220,29 @@ Información adicional deshabilitada
   vars:
     informacion_detallada: true
   tasks:
-     - name: Cread el archivo /tmp/index.html
+     - name: Crea el archivo /tmp/index.html
        template:
          src: index.html.j2
          dest: /tmp/index.html</code></pre>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_más_información"><a class="anchor" href="#_más_información"></a>Más información</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://docs.ansible.com/ansible/latest/user_guide/playbooks_vars_facts.html" target="_blank" rel="noopener">Documentación de Ansible: Using facts</a></p>
+</li>
+<li>
+<p><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/template_module.html" target="_blank" rel="noopener">Documentación de Ansible: Modulo template</a></p>
+</li>
+<li>
+<p><a href="https://jinja.palletsprojects.com/en/3.1.x/templates/" target="_blank" rel="noopener">Jinja2 Templates documentation</a></p>
+</li>
+</ul>
 </div>
 </div>
 </div>

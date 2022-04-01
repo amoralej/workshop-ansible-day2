@@ -100,18 +100,18 @@
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>En ansible, es posible utilizar las variables con distintas finalidades.</p>
+<p>En ansible es posible utilizar las variables con distintas finalidades.</p>
 </div>
 <div class="paragraph">
-<p>Normalmente, para usar una variable las incluiremos dentro de unas dobles llaves entrecomilladas "{{ variable }}" será sustituido por su valor.</p>
+<p>Normalmente, para usar una variable, la incluiremos entre unas dobles llaves "{{ variable }}" y será sustituido por su valor.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_uso_de_parámetros_de_una_tarea"><a class="anchor" href="#_uso_de_parámetros_de_una_tarea"></a>Uso de parámetros de una tarea</h2>
+<h2 id="_uso_de_variables_en_parámetros_de_una_tarea"><a class="anchor" href="#_uso_de_variables_en_parámetros_de_una_tarea"></a>Uso de variables en parámetros de una tarea</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>1) En el ejemplo de nuestra aplicación, es posible instalar los paquetes necesarios en cada sistema utilizando la variable package.</p>
+<p>En el ejemplo de nuestra aplicación, es posible instalar los paquetes necesarios en cada sistema utilizando la variable package. Para ello creamos este playbook:</p>
 </div>
 <div class="listingblock lines_7">
 <div class="content">
@@ -125,7 +125,10 @@
 </div>
 </div>
 <div class="paragraph">
-<p>Y ejecutar el playbook. En este caso estamos usando la opción become, lo que implica que los comando se ejecutarán como root, usando sudo. Para ello usamos la opción -kK para que nos pida la contraseña, que en este caso es "student":</p>
+<p>Y lo ejecutamos.</p>
+</div>
+<div class="paragraph">
+<p>En este caso estamos usando la opción <code>become</code> lo que implica que los comando se ejecutarán como root, usando sudo. Para ello usamos la opción -kK para que nos pida la contraseña, que en este caso es "student":</p>
 </div>
 <div class="listingblock lines_7">
 <div class="content">
@@ -138,7 +141,7 @@
 <h2 id="_uso_de_variables_en_condicionales_para_la_ejecución_de_tareas"><a class="anchor" href="#_uso_de_variables_en_condicionales_para_la_ejecución_de_tareas"></a>Uso de variables en condicionales para la ejecución de tareas</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>1) En muchos casos nos interesará condicionar la ejecución de una tarea a que una variable tenga un valor determinado. Los condicionales en ansible se crean con la opción <code>when</code> de tal manera que una tarea que tiene un when solo se ejecutará cuando la condición puesta es verdadera.</p>
+<p>En muchos casos nos interesará condicionar la ejecución de una tarea a que una variable tenga un valor determinado. Los condicionales en ansible se crean con la opción <code>when</code> de tal manera que una tarea que tiene un when solo se ejecutará cuando la condición puesta es verdadera.</p>
 </div>
 <div class="paragraph">
 <p>En este caso, las variables no van entre llaves, ni comillas.</p>
@@ -150,13 +153,13 @@
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">- hosts: all
   tasks:
-     - name: Ejecutar el comando hostname
-       shell: hostname
-       register: hostname_output
+    - name: Ejecutar el comando hostname
+      shell: hostname
+      register: hostname_output
 
     - name: Mostrar la variable hostname_output
       debug:
-        var: hostname_salida
+        var: hostname_output
       when: hostname_output.stdout == 'serverb.lab.example.com'</code></pre>
 </div>
 </div>
@@ -164,7 +167,7 @@
 <p>Fijaos que en este caso, la tarea de tipo debug ha sido omitida ('skipped') para los servidores a, c y d y solo se ha ejecutado en el servidor b.</p>
 </div>
 <div class="paragraph">
-<p>Fijaos que en la comparación puedo usar operadores de igualdad <code>==</code>, de distinto <code>!=</code>, de mayor <code>&gt;</code>, menor <code>&lt;</code>, mayor o igual <code>&gt;=</code>, y menor o igual <code>&#8656;</code>.</p>
+<p>Fijaos que en la comparación puedo usar operadores de igualdad ==, de distinto !=, de mayor &gt;, menor &lt;, mayor o igual &gt;=, y menor o igual &#8656;.</p>
 </div>
 </div>
 </div>
@@ -187,6 +190,27 @@
          src: fichero_ejemplo.txt
          dst: "/tmp/{{ hostname_output.stdout }}.txt"</code></pre>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_más_información"><a class="anchor" href="#_más_información"></a>Más información</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html" target="_blank" rel="noopener">Documentación de Ansible: Using Variables</a></p>
+</li>
+<li>
+<p><a href="https://docs.ansible.com/ansible/latest/user_guide/playbooks_conditionals.html" target="_blank" rel="noopener">Documentación de Ansible: Conditionals</a></p>
+</li>
+<li>
+<p><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/package_module.html" target="_blank" rel="noopener">Documentación de Ansible: Modulo package</a></p>
+</li>
+<li>
+<p><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/copy_module.html" target="_blank" rel="noopener">Documentación de Ansible: Modulo Copy</a></p>
+</li>
+</ul>
 </div>
 </div>
 </div>

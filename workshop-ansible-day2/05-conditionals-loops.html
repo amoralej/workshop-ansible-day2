@@ -119,7 +119,7 @@
 <div class="ulist">
 <ul>
 <li>
-<p><code>==</code>, <code>!=</code>, <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&#8656;</code> comparan igualdad, diferencia, mayor, menor, etc&#8230;&#8203;</p>
+<p>==, !=, &gt;, &lt;, &gt;=, &#8656; comparan igualdad, diferencia, mayor, menor, etc&#8230;&#8203;</p>
 </li>
 <li>
 <p>&lt;value&gt; in &lt;list&gt; chequea que un valor exista en una lista</p>
@@ -137,6 +137,9 @@
 </div>
 <div class="paragraph">
 <p>Por último, es posible combinar varias condiciones en un solo condicional uniéndolas con los operadores <code>or</code> o <code>and</code>. En ese caso se requiere que se cumpla cualquiera de las condicione o ambas respectivamente.</p>
+</div>
+<div class="paragraph">
+<p>Para más tests disponibles en ansible puedes consultar <a href="https://docs.ansible.com/ansible/latest/user_guide/playbooks_tests.html" target="_blank" rel="noopener">el manual oficial</a>.</p>
 </div>
 <div class="paragraph">
 <p>Algunos ejemplos de uso de condicionales:</p>
@@ -199,6 +202,27 @@
         state: present
       loop: "{{ usuarios }}"</code></pre>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_más_información"><a class="anchor" href="#_más_información"></a>Más información</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://docs.ansible.com/ansible/latest/user_guide/playbooks_conditionals.html" target="_blank" rel="noopener">Documentación de Ansible: Conditionals</a></p>
+</li>
+<li>
+<p><a href="https://docs.ansible.com/ansible/latest/user_guide/playbooks_tests.html" target="_blank" rel="noopener">Documentación de Ansible: Tests</a></p>
+</li>
+<li>
+<p><a href="https://docs.ansible.com/ansible/latest/user_guide/playbooks_loops.html" target="_blank" rel="noopener">Documentación de Ansible: Loops</a></p>
+</li>
+<li>
+<p><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/user_module.html" target="_blank" rel="noopener">Documentación de Ansible: Modulo user</a></p>
+</li>
+</ul>
 </div>
 </div>
 </div>

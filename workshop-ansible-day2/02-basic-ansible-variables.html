@@ -255,21 +255,39 @@ test_dic:
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">- hosts: all
   tasks:
-     - name: Ejecutar el comando hostname
-       shell: hostname
-       register: hostname_output
+    - name: Ejecutar el comando hostname
+      shell: hostname
+      register: hostname_output
 
     - name: Mostrar la variable hostname_output
       debug:
-        var: hostname_salida
+        var: hostname_output
 
     - name: Mostrar la salida standard del comando hostname
       debug:
-        var: hostname_salida.stdout</code></pre>
+        var: hostname_output.stdout</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Fijaos en el tipo de dato que es hostanme_salida y hostname_dalida.stdout.</p>
+<p>Fijaos en el tipo de dato que es hostname_output (un diccionario) y como accedemos al valor asignado a la clave stdout <code>hostname_output.stdout</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_más_información"><a class="anchor" href="#_más_información"></a>Más información:</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html" target="_blank" rel="noopener">Documentación de Ansible: Using Variables</a></p>
+</li>
+<li>
+<p><a href="https://docs.ansible.com/ansible/latest/reference_appendices/special_variables.html" target="_blank" rel="noopener">Documentación de Ansible: Special Variables</a></p>
+</li>
+<li>
+<p><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/debug_module.html" target="_blank" rel="noopener">Documentación de Ansible: Modulo debug</a></p>
+</li>
+</ul>
 </div>
 </div>
 </div>
