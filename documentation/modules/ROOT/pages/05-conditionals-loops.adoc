@@ -10,7 +10,7 @@ when: <variable> <operador> <valor>
 
 Las variables en este caso no van entre llaves y el operador puede dependera del tipo de valor y del tipo de comparación:
 
-- `==`, `!=`, `>`, `<`, `>=`, `<=` comparan igualdad, diferencia, mayor, menor, etc...
+- ==, !=, >, <, >=, <= comparan igualdad, diferencia, mayor, menor, etc...
 - <value> in <list> chequea que un valor exista en una lista
 - <variable> is defined (o is not defined) chequea que una variable esté o no definida.
 - Si la condición es simplemente del tipo *"when: <variable>"* se tratará como un booleano y se chequeara que es true.
@@ -18,6 +18,8 @@ Las variables en este caso no van entre llaves y el operador puede dependera del
 En el caso de `is` y `in` es posible invertir la comparación usando `is not` o `not in`.
 
 Por último, es posible combinar varias condiciones en un solo condicional uniéndolas con los operadores `or` o `and`. En ese caso se requiere que se cumpla cualquiera de las condicione o ambas respectivamente.
+
+Para más tests disponibles en ansible puedes consultar https://docs.ansible.com/ansible/latest/user_guide/playbooks_tests.html[el manual oficial,window=_blank].
 
 Algunos ejemplos de uso de condicionales:
 
@@ -76,4 +78,11 @@ A continuación muestro un ejemplo de creación de usuarios basado en una lista 
       loop: "{{ usuarios }}"
         
 ----
+
+== Más información
+
+- https://docs.ansible.com/ansible/latest/user_guide/playbooks_conditionals.html[Documentación de Ansible: Conditionals,window=_blank]
+- https://docs.ansible.com/ansible/latest/user_guide/playbooks_tests.html[Documentación de Ansible: Tests,window=_blank]
+- https://docs.ansible.com/ansible/latest/user_guide/playbooks_loops.html[Documentación de Ansible: Loops,window=_blank]
+- https://docs.ansible.com/ansible/latest/collections/ansible/builtin/user_module.html[Documentación de Ansible: Modulo user,window=_blank]
 

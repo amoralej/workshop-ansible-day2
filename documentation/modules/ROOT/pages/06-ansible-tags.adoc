@@ -67,3 +67,7 @@ $ ansible-playbook -i hosts --skip-tags preparacion,instalacion test_tags.yaml
 
 Existen dos nombres de tags especiales, `always` y `never`. Una tarea que se añada a la tag `always` siempre será ejecutada incluso aunque no se incluya en la opción --tags a menos que se use --skip-tags always. Igualmente, las tareas asignadas a never no se ejecutarán nunca a menos que usemos --tags never.
 
+== Más información
+
+- https://docs.ansible.com/ansible/latest/user_guide/playbooks_tags.html[Documentación de Ansible: Tags,window=_blank]
+

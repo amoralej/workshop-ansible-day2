@@ -1,12 +1,12 @@
 = Usar variables en Ansible
 
-En ansible, es posible utilizar las variables con distintas finalidades.
+En ansible es posible utilizar las variables con distintas finalidades.
 
-Normalmente, para usar una variable las incluiremos dentro de unas dobles llaves entrecomilladas "{{ variable }}" será sustituido por su valor.
+Normalmente, para usar una variable, la incluiremos entre unas dobles llaves "{{ variable }}" y será sustituido por su valor.
 
-== Uso de parámetros de una tarea
+== Uso de variables en parámetros de una tarea
 
-1) En el ejemplo de nuestra aplicación, es posible instalar los paquetes necesarios en cada sistema utilizando la variable package.
+En el ejemplo de nuestra aplicación, es posible instalar los paquetes necesarios en cada sistema utilizando la variable package. Para ello creamos este playbook:
 
 [.lines_7]
 [source,bash,subs="+macros,+attributes"]
@@ -20,7 +20,9 @@ Normalmente, para usar una variable las incluiremos dentro de unas dobles llaves
         state: present
 ----
 
-Y ejecutar el playbook. En este caso estamos usando la opción become, lo que implica que los comando se ejecutarán como root, usando sudo. Para ello usamos la opción -kK para que nos pida la contraseña, que en este caso es "student":
+Y lo ejecutamos.
+
+En este caso estamos usando la opción `become` lo que implica que los comando se ejecutarán como root, usando sudo. Para ello usamos la opción -kK para que nos pida la contraseña, que en este caso es "student":
 
 [.lines_7]
 [source,bash,subs="+macros,+attributes"]
@@ -30,7 +32,7 @@ ansible-playbook -kK -i hosts test_variables.yaml
 
 == Uso de variables en condicionales para la ejecución de tareas
 
-1) En muchos casos nos interesará condicionar la ejecución de una tarea a que una variable tenga un valor determinado. Los condicionales en ansible se crean con la opción `when` de tal manera que una tarea que tiene un when solo se ejecutará cuando la condición puesta es verdadera.
+En muchos casos nos interesará condicionar la ejecución de una tarea a que una variable tenga un valor determinado. Los condicionales en ansible se crean con la opción `when` de tal manera que una tarea que tiene un when solo se ejecutará cuando la condición puesta es verdadera.
 
 En este caso, las variables no van entre llaves, ni comillas.
 
@@ -41,19 +43,19 @@ Por ejemplo, si queremos ejecutar una determinada tarea solo en el primero de nu
 ----
 - hosts: all
   tasks:
-     - name: Ejecutar el comando hostname
-       shell: hostname
-       register: hostname_output
+    - name: Ejecutar el comando hostname
+      shell: hostname
+      register: hostname_output
 
     - name: Mostrar la variable hostname_output
       debug:
-        var: hostname_salida
+        var: hostname_output
       when: hostname_output.stdout == 'serverb.lab.example.com'
 ----
 
 Fijaos que en este caso, la tarea de tipo debug ha sido omitida ('skipped') para los servidores a, c y d y solo se ha ejecutado en el servidor b.
 
-Fijaos que en la comparación puedo usar operadores de igualdad `==`, de distinto `!=`, de mayor `>`, menor `<`, mayor o igual `>=`, y menor o igual `<=`.
+Fijaos que en la comparación puedo usar operadores de igualdad ==, de distinto !=, de mayor >, menor <, mayor o igual >=, y menor o igual <=.
 
 
 == Más ejemplos de uso de variables en una tarea
@@ -75,4 +77,10 @@ Otro caso de uso muy habitual en ansible es crear un archivo con un cierto conte
          dst: "/tmp/{{ hostname_output.stdout }}.txt"
 ----
 
+== Más información
+
+- https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html[Documentación de Ansible: Using Variables,window=_blank]
+- https://docs.ansible.com/ansible/latest/user_guide/playbooks_conditionals.html[Documentación de Ansible: Conditionals,window=_blank]
+- https://docs.ansible.com/ansible/latest/collections/ansible/builtin/package_module.html[Documentación de Ansible: Modulo package,window=_blank]
+- https://docs.ansible.com/ansible/latest/collections/ansible/builtin/copy_module.html[Documentación de Ansible: Modulo Copy,window=_blank]
 

@@ -142,19 +142,23 @@ test_dic:
 ----
 - hosts: all
   tasks:
-     - name: Ejecutar el comando hostname
-       shell: hostname
-       register: hostname_output
+    - name: Ejecutar el comando hostname
+      shell: hostname
+      register: hostname_output
 
     - name: Mostrar la variable hostname_output
       debug:
-        var: hostname_salida
+        var: hostname_output
 
     - name: Mostrar la salida standard del comando hostname
       debug:
-        var: hostname_salida.stdout
+        var: hostname_output.stdout
 ----
 
-Fijaos en el tipo de dato que es hostanme_salida y hostname_dalida.stdout.
+Fijaos en el tipo de dato que es hostname_output (un diccionario) y como accedemos al valor asignado a la clave stdout `hostname_output.stdout`.
 
+== Más información:
 
+- https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html[Documentación de Ansible: Using Variables,window=_blank]
+- https://docs.ansible.com/ansible/latest/reference_appendices/special_variables.html[Documentación de Ansible: Special Variables,window=_blank]
+- https://docs.ansible.com/ansible/latest/collections/ansible/builtin/debug_module.html[Documentación de Ansible: Modulo debug,window=_blank]
